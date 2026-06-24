@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模块 1：核心概念与架构 — Hermes Agent 完全学习手册</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --text3: #6e7681;
+    --accent: #58a6ff;
+    --accent2: #79c0ff;
+    --green: #3fb950;
+    --orange: #d2991d;
+    --red: #f85149;
+    --purple: #a371f7;
+    --teal: #39d2c0;
+    --pink: #f778ba;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --mono: 'JetBrains Mono', 'Cascadia Code', 'Consolas', 'SF Mono', monospace;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--text); font-family: var(--font);
+    line-height: 1.8; font-size: 15px;
+  }
+
+  /* ── Layout ── */
+  .container { max-width: 920px; margin: 0 auto; padding: 50px 24px 80px; }
+
+  /* ── Hero ── */
+  .hero {
+    text-align: center; padding: 60px 0 32px;
+    border-bottom: 1px solid var(--border); margin-bottom: 40px;
+  }
+  .hero .badge {
+    display: inline-block; background: var(--surface2); color: var(--accent);
+    padding: 4px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
+    margin-bottom: 16px; letter-spacing: 0.5px;
+  }
+  .hero h1 {
+    font-size: 44px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.2;
+    background: linear-gradient(135deg, #58a6ff 0%, #a371f7 45%, #39d2c0 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 12px;
+  }
+  .hero .subtitle { color: var(--text2); font-size: 17px; max-width: 620px; margin: 0 auto 8px; }
+  .hero .meta { color: var(--text3); font-size: 13px; }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 20px 28px; margin: 24px 0;
+  }
+  .toc h3 { font-size: 15px; margin-bottom: 12px; color: var(--accent); }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 4px 0; color: var(--text2); font-size: 14px; }
+  .toc li a { color: var(--accent2); text-decoration: none; }
+  .toc li a:hover { text-decoration: underline; }
+
+  /* ── Section ── */
+  section { margin: 48px 0; }
+  .section-title {
+    font-size: 26px; font-weight: 700; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 10px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title .num {
+    background: var(--accent); color: #000; min-width: 36px; height: 36px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800; flex-shrink: 0;
+  }
+  .section-subtitle { color: var(--text2); font-size: 14px; margin-bottom: 24px; margin-top: 4px; }
+
+  /* ── Sub-section ── */
+  .sub-title {
+    font-size: 19px; font-weight: 700; margin: 28px 0 12px; color: var(--accent2);
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 24px; margin: 16px 0;
+  }
+  .card h3 { font-size: 16px; margin-bottom: 8px; }
+  .card p, .card li { color: var(--text2); font-size: 14px; }
+
+  .card-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px; margin: 16px 0;
+  }
+
+  /* ── Tables ── */
+  .compare-table {
+    width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px;
+  }
+  .compare-table thead th {
+    background: var(--surface2); text-align: left; padding: 10px 16px;
+    font-weight: 600; border-bottom: 1px solid var(--border);
+  }
+  .compare-table td {
+    padding: 10px 16px; border-bottom: 1px solid rgba(48,54,61,0.5); vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table .c1 { color: var(--green); font-weight: 600; }
+  .compare-table .c2 { color: var(--red); }
+
+  /* ── Code ── */
+  .code-block {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px; margin: 12px 0;
+    font-family: var(--mono); font-size: 13px; line-height: 1.6;
+    overflow-x: auto; color: var(--text);
+  }
+  .code-block .kw { color: var(--purple); }
+  .code-block .cmt { color: var(--text3); }
+  .code-block .str { color: var(--green); }
+  .code-block .path { color: var(--accent2); }
+
+  /* ── Diagrams ── */
+  .flow-container {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 24px; margin: 16px 0;
+    overflow-x: auto;
+  }
+  .flow-container svg { display: block; margin: 0 auto; max-width: 100%; }
+
+  /* ── Directory tree ── */
+  .dir-tree {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 20px 24px; margin: 16px 0;
+    font-family: var(--mono); font-size: 13px; line-height: 1.8;
+  }
+  .dir-tree .dir { color: var(--accent2); }
+  .dir-tree .file { color: var(--text); }
+  .dir-tree .cmt { color: var(--text3); font-style: italic; }
+  .dir-tree .hl { color: var(--orange); font-weight: 600; }
+
+  /* ── Callouts ── */
+  .callout {
+    border-left: 3px solid var(--accent); padding: 12px 16px; margin: 16px 0;
+    background: rgba(88,166,255,0.06); border-radius: 0 var(--radius) var(--radius) 0;
+    font-size: 14px;
+  }
+  .callout.warn { border-color: var(--orange); background: rgba(210,153,29,0.06); }
+  .callout.tip { border-color: var(--green); background: rgba(63,185,80,0.06); }
+  .callout.think { border-color: var(--purple); background: rgba(163,113,247,0.06); }
+  .callout strong { color: var(--text); }
+
+  /* ── Takeaway / 要点 ── */
+  .takeaway {
+    background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(163,113,247,0.08));
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 16px 20px; margin: 20px 0;
+  }
+  .takeaway .label {
+    font-size: 12px; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+  }
+  .takeaway ul { padding-left: 18px; }
+  .takeaway li { font-size: 14px; margin: 3px 0; }
+
+  /* ── Scenario ── */
+  .scenario {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 20px; margin: 16px 0;
+    display: flex; gap: 16px; align-items: flex-start;
+  }
+  .scenario .icon { font-size: 32px; flex-shrink: 0; }
+  .scenario h4 { font-size: 15px; margin-bottom: 4px; }
+  .scenario p { font-size: 14px; color: var(--text2); }
+
+  /* ── Prompt stack ── */
+  .stack {
+    display: flex; flex-direction: column; gap: 2px; margin: 16px 0;
+    font-family: var(--mono); font-size: 12px;
+  }
+  .stack .l {
+    padding: 10px 16px; border-radius: var(--radius);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .stack .l:nth-child(1) { background: #1a1a2e; color: #e94560; width: 100%; }
+  .stack .l:nth-child(2) { background: #16213e; color: #f5c518; width: 96%; margin-left: 4%; }
+  .stack .l:nth-child(3) { background: #0f3460; color: #58a6ff; width: 92%; margin-left: 8%; }
+  .stack .l:nth-child(4) { background: #1a1a2e; color: #a371f7; width: 88%; margin-left: 12%; }
+  .stack .l:nth-child(5) { background: #16213e; color: #39d2c0; width: 84%; margin-left: 16%; }
+  .stack .l:nth-child(6) { background: #0f3460; color: #f778ba; width: 80%; margin-left: 20%; }
+  .stack .l:nth-child(7) { background: #1a1a2e; color: #8b949e; width: 76%; margin-left: 24%; }
+  .stack .l:nth-child(8) { background: #16213e; color: #3fb950; width: 72%; margin-left: 28%; }
+  .stack .lt { font-weight: 600; }
+  .stack .ln { color: var(--text2); font-style: italic; }
+
+  /* ── Glossary grid ── */
+  .glossary-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px; margin: 16px 0;
+  }
+  .glossary-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 20px; text-align: center;
+    transition: border-color 0.2s;
+  }
+  .glossary-card:hover { border-color: var(--accent); }
+  .glossary-card .emoji { font-size: 28px; margin-bottom: 8px; }
+  .glossary-card .title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .glossary-card .desc { color: var(--text2); font-size: 13px; }
+
+  /* ── Chips / Tags ── */
+  .chip {
+    display: inline-block; padding: 2px 10px; border-radius: 12px;
+    font-size: 12px; font-weight: 600; margin: 2px;
+  }
+  .chip.b { background: rgba(88,166,255,0.15); color: var(--accent); }
+  .chip.g { background: rgba(63,185,80,0.15); color: var(--green); }
+  .chip.p { background: rgba(163,113,247,0.15); color: var(--purple); }
+  .chip.o { background: rgba(210,153,29,0.15); color: var(--orange); }
+
+  /* ── FAQ ── */
+  .faq-item { margin: 12px 0; }
+  .faq-q { font-weight: 700; color: var(--accent2); cursor: default; font-size: 15px; }
+  .faq-a { color: var(--text2); font-size: 14px; padding: 6px 0 12px 16px; }
+
+  /* ── Misc ── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  p { margin: 10px 0; }
+  code {
+    background: var(--surface2); padding: 2px 6px; border-radius: 4px;
+    font-family: var(--mono); font-size: 13px;
+  }
+  strong { color: var(--text); }
+  .page-nav {
+    display: flex; justify-content: space-between; margin-top: 48px;
+    padding-top: 20px; border-top: 1px solid var(--border);
+  }
+  .page-nav a {
+    color: var(--accent); text-decoration: none; font-weight: 600;
+  }
+  .page-nav a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .container { padding: 24px 16px 48px; }
+    .hero h1 { font-size: 30px; }
+    .section-title { font-size: 22px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .glossary-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <div class="hero">
+    <div class="badge">模块 1 / 10</div>
+    <h1>核心概念与架构</h1>
+    <p class="subtitle">从"什么是 AI Agent"开始，一步步拆解 Hermes 的骨架——它怎么想、怎么做、各部分怎么配合。</p>
+    <p class="meta">预计阅读时间：25 分钟 · 适合：所有技术背景</p>
+  </div>
+
+  <!-- ═══════════════ TOC ═══════════════ -->
+  <div class="toc">
+    <h3>📑 本模块目录</h3>
+    <ol>
+      <li><a href="#s0">先理解："Agent"到底是什么？</a></li>
+      <li><a href="#s0b">Hermes 在这个光谱的哪个位置？</a></li>
+      <li><a href="#s1">Hermes Agent 的核心定位</a></li>
+      <li><a href="#s2">核心引擎：Agent Loop（循环）</a></li>
+      <li><a href="#s3">关键目录结构</a></li>
+      <li><a href="#s4">System Prompt 是怎么拼出来的？</a></li>
+      <li><a href="#s5">一次请求的完整数据流</a></li>
+      <li><a href="#s6">核心术语速查表</a></li>
+      <li><a href="#s7">常见疑问</a></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════ 0. 什么是 Agent ═══════════════ -->
+  <section id="s0">
+    <div class="section-title"><span class="num">0</span> 先理解：「Agent」到底是什么？</div>
+    <div class="section-subtitle">如果你已经理解 Agent 概念，可以直接<a href="#s1">跳到第 1 节</a></div>
+
+    <p>在深入 Hermes 之前，我们需要先对齐一个基础概念：<strong>什么叫 AI Agent？</strong></p>
+
+    <h3 class="sub-title">🧍 类比：员工 vs 搜索引擎</h3>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>🔍 传统 AI（ChatGPT 等）</h3>
+        <p>像一个<strong>知识渊博的顾问</strong>——你问一个问题，它给你一个答案。然后对话结束。</p>
+        <ul style="margin-top:8px;padding-left:18px;">
+          <li>不会主动做事</li>
+          <li>不会记住你上次说了什么</li>
+          <li>无法操作你的电脑或系统</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🤖 AI Agent（Hermes 等）</h3>
+        <p>像一个<strong>能干的员工</strong>——你交代一个任务，它自己规划、执行、检查结果，过程中可能用各种工具。</p>
+        <ul style="margin-top:8px;padding-left:18px;">
+          <li>能主动调用工具（终端、文件、浏览器…）</li>
+          <li>跨会话记住你的偏好和历史</li>
+          <li>可以无人值守定时运行</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="sub-title">🧠 Agent 的四个核心能力</h3>
+    <p>所有 AI Agent（不限于 Hermes）都具备这四个维度的能力：</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1️⃣ 感知 (Perceive)</h3>
+        <p>读取输入——用户消息、文件内容、API 返回、终端输出。Agent 需要"看到"发生了什么。</p>
+      </div>
+      <div class="card">
+        <h3>2️⃣ 推理 (Reason)</h3>
+        <p>理解意图、拆解任务、决定下一步做什么。这是 LLM（大语言模型）的核心价值。</p>
+      </div>
+      <div class="card">
+        <h3>3️⃣ 行动 (Act)</h3>
+        <p>实际执行——写文件、跑命令、调 API、发消息。Agent 不只是"想"，还要"做"。</p>
+      </div>
+      <div class="card">
+        <h3>4️⃣ 记忆 (Remember)</h3>
+        <p>把重要信息存下来，下次还能用。没有记忆的 Agent 每次都是"第一次见面"。</p>
+      </div>
+    </div>
+
+    <div class="callout think">
+      <strong>🤔 停下来想一想：</strong>ChatGPT 有这四种能力吗？它有感知（读你的消息）和推理（生成回答），但<strong>没有行动能力</strong>（不能操作你的系统）和<strong>持久记忆</strong>（关了对话就忘）。这就是 Agent 和 Chatbot 的本质区别。
+    </div>
+
+    <h3 class="sub-title">📊 Agent 光谱：从简单到复杂</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>类型</th><th>例子</th><th>感知</th><th>推理</th><th>行动</th><th>记忆</th></tr>
+      </thead>
+      <tr><td><strong>Chatbot</strong></td><td>ChatGPT 网页版</td><td>✅</td><td>✅</td><td>❌</td><td>❌</td></tr>
+      <tr><td><strong>Copilot</strong></td><td>GitHub Copilot</td><td>✅</td><td>✅</td><td>✅（仅编辑器内）</td><td>❌</td></tr>
+      <tr><td><strong>Coding Agent</strong></td><td>Claude Code / Codex CLI</td><td>✅</td><td>✅</td><td>✅（终端+文件）</td><td>❌（单会话）</td></tr>
+      <tr><td><strong>Autonomous Agent</strong></td><td><strong>Hermes Agent</strong></td><td>✅</td><td>✅</td><td>✅（完整系统）</td><td>✅（跨会话）</td></tr>
+    </table>
+
+    <div class="takeaway">
+      <div class="label">📌 关键认知</div>
+      <ul>
+        <li><strong>Chatbot ≠ Agent</strong>。能聊天 ≠ 能干活。</li>
+        <li>Agent 的核心增量是<strong>行动能力</strong>（调用工具）和<strong>持久记忆</strong>。</li>
+        <li>Hermes 站在光谱的最右端：全能力、全平台、自进化。</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 0b. Hermes 的位置 ═══════════════ -->
+  <section id="s0b">
+    <div class="section-title"><span class="num">0</span> Hermes 在这个光谱的哪个位置？</div>
+    <div class="section-subtitle">同类产品对比——帮你快速建立坐标系</div>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>维度</th><th>ChatGPT</th><th>Claude Code</th><th>Codex CLI</th><th><strong>Hermes Agent</strong></th></tr>
+      </thead>
+      <tr>
+        <td>开发者</td><td>OpenAI</td><td>Anthropic</td><td>OpenAI</td><td><strong>Nous Research</strong></td>
+      </tr>
+      <tr>
+        <td>定位</td><td>通用 Chatbot</td><td>终端 Coding Agent</td><td>终端 Coding Agent</td><td><strong>通用自主 Agent</strong></td>
+      </tr>
+      <tr>
+        <td>运行环境</td><td>网页 / App</td><td>终端</td><td>终端</td><td><strong>终端 / 多平台 Gateway</strong></td>
+      </tr>
+      <tr>
+        <td>持久记忆</td><td><span class="c2">✗</span></td><td><span class="c2">✗</span></td><td><span class="c2">✗</span></td><td><strong><span class="c1">✓ 跨会话</span></strong></td>
+      </tr>
+      <tr>
+        <td>自我学习</td><td><span class="c2">✗</span></td><td><span class="c2">✗</span></td><td><span class="c2">✗</span></td><td><strong><span class="c1">✓ Skills 系统</span></strong></td>
+      </tr>
+      <tr>
+        <td>多平台</td><td>网页 + App</td><td>终端</td><td>终端</td><td><strong><span class="c1">✓ 飞书/Telegram/Discord/...</span></strong></td>
+      </tr>
+      <tr>
+        <td>定时任务</td><td><span class="c2">✗</span></td><td><span class="c2">✗</span></td><td><span class="c2">✗</span></td><td><strong><span class="c1">✓ Cron</span></strong></td>
+      </tr>
+      <tr>
+        <td>Provider</td><td>仅 OpenAI</td><td>仅 Anthropic</td><td>仅 OpenAI</td><td><strong><span class="c1">✓ 20+ Provider</span></strong></td>
+      </tr>
+      <tr>
+        <td>开源</td><td><span class="c2">✗</span></td><td><span class="c2">✗</span></td><td><span class="c2">✗</span></td><td><strong><span class="c1">✓ MIT</span></strong></td>
+      </tr>
+    </table>
+
+    <div class="callout">
+      <strong>一句话总结：</strong>Hermes 不是"另一个 ChatGPT 套壳"。它和 Claude Code / Codex CLI 同属 <strong>Agent 赛道</strong>，但在<strong>记忆、学习、平台、自动化</strong>四个维度上走得更远。
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 1. 核心定位 ═══════════════ -->
+  <section id="s1">
+    <div class="section-title"><span class="num">1</span> Hermes Agent 的核心定位</div>
+    <div class="section-subtitle">它不是什么？它是什么？它为什么这样设计？</div>
+
+    <div class="callout warn">
+      <strong>❌ 常见误解：</strong>Hermes = ChatGPT + 几个插件<br>
+      <strong>✅ 正确理解：</strong>Hermes 是一个<strong>有记忆、会学习、能独立干活</strong>的自主 Agent 进程。它不是「你问一句它答一句」的 chatbot——它是「你交代一个目标，它自己去完成」的<strong>数字员工</strong>。
+    </div>
+
+    <h3 class="sub-title">🏗️ Hermes 的四大设计理念</h3>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>🔓 Provider 无关</h3>
+        <p>不绑定任何一家模型厂商。支持 OpenRouter、Anthropic、OpenAI、DeepSeek、本地模型等 20+ Provider。</p>
+        <p style="margin-top:8px;">你可以在任务中途切换模型，不影响上下文。</p>
+      </div>
+      <div class="card">
+        <h3>🧠 自我进化</h3>
+        <p>Agent 完成一个复杂任务后，可以<strong>自动保存为 Skill</strong>。下次遇到类似任务时自动加载，越用越强。</p>
+        <p style="margin-top:8px;">这是 Hermes 最独特的差异化特性。</p>
+      </div>
+      <div class="card">
+        <h3>🌐 无处不在</h3>
+        <p>同一套 Agent 逻辑跑在终端、飞书、Telegram、Discord 等 10+ 平台。一次配置，处处可达。</p>
+        <p style="margin-top:8px;">Gateway 层负责平台适配，Agent 核心逻辑不变。</p>
+      </div>
+      <div class="card">
+        <h3>⏰ 自主运行</h3>
+        <p>通过 Cron 定时任务，Agent 可以在没有人操作的情况下自动完成工作。</p>
+        <p style="margin-top:8px;">比如：每天早上 9 点自动汇总昨天的 Git 提交并推送到群里。</p>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="label">📌 本节要点</div>
+      <ul>
+        <li>Hermes 不是 Chatbot 套壳，是<strong>自主 Agent 框架</strong></li>
+        <li>四大支柱：Provider 无关、自我进化、多平台、自动化</li>
+        <li>同类产品中最独特的差异化：<strong>Skills 自学习系统</strong></li>
+      </ul>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 2. Agent Loop ═══════════════ -->
+  <section id="s2">
+    <div class="section-title"><span class="num">2</span> 核心引擎：Agent Loop（循环）</div>
+    <div class="section-subtitle">这是整个框架的心跳——理解了这个循环，就理解了 Hermes 怎么"想"和"做"</div>
+
+    <h3 class="sub-title">🎬 先看一个具体例子</h3>
+
+    <div class="scenario">
+      <div class="icon">👤</div>
+      <div>
+        <h4>用户说：</h4>
+        <p>"帮我在 <code>~/projects/myapp</code> 目录下创建一个 Python 项目，用 FastAPI，带一个 <code>/health</code> 端点。"</p>
+      </div>
+    </div>
+
+    <p>下面是 Hermes 实际的处理过程——<strong>每一步都是一个 Turn 内的子步骤</strong>：</p>
+
+    <table class="compare-table">
+      <thead><tr><th style="width:50px">步</th><th style="width:120px">LLM 返回什么</th><th>Agent 做什么</th><th>结果</th></tr></thead>
+      <tr>
+        <td>1</td><td>Tool Call: <code>terminal("mkdir -p ~/projects/myapp")</code></td>
+        <td>执行终端命令</td>
+        <td>目录创建成功</td>
+      </tr>
+      <tr>
+        <td>2</td><td>Tool Call: <code>write_file("~/projects/myapp/main.py", ...)</code></td>
+        <td>写入 FastAPI 代码</td>
+        <td>文件已写入</td>
+      </tr>
+      <tr>
+        <td>3</td><td>Tool Call: <code>write_file("~/projects/myapp/requirements.txt", ...)</code></td>
+        <td>写入依赖文件</td>
+        <td>文件已写入</td>
+      </tr>
+      <tr>
+        <td>4</td><td>Tool Call: <code>terminal("cd ~/projects/myapp && pip install -r requirements.txt")</code></td>
+        <td>安装依赖</td>
+        <td>安装成功</td>
+      </tr>
+      <tr>
+        <td>5</td><td>Tool Call: <code>terminal("curl localhost:8000/health")</code></td>
+        <td>验证端点</td>
+        <td>返回 <code>{"status":"ok"}</code></td>
+      </tr>
+      <tr>
+        <td style="color:var(--green);font-weight:700">6</td>
+        <td style="color:var(--green)"><strong>文本回复</strong></td>
+        <td colspan="2" style="color:var(--green)">→ <strong>发给用户：</strong>"项目已创建，FastAPI 在 8000 端口运行，/health 端点返回正常。"</td>
+      </tr>
+    </table>
+
+    <div class="callout think">
+      <strong>🤔 注意观察：</strong>Agent <strong>不是一次就搞定的</strong>。它一步一步来——先建目录、再写文件、再安装依赖、再验证——每步都是 LLM 看了上一步的结果后决定下一步。这就是 Agent Loop 的本质：<strong>感知→推理→行动→观察结果→再推理→再行动→……直到完成。</strong>
+    </div>
+
+    <h3 class="sub-title">🔁 Agent Loop 流程图</h3>
+
+    <div class="flow-container">
+      <svg viewBox="0 0 880 700" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="aB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#58a6ff"/>
+          </marker>
+          <marker id="aG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#3fb950"/>
+          </marker>
+          <marker id="aP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#a371f7"/>
+          </marker>
+        </defs>
+
+        <rect x="0" y="0" width="880" height="700" rx="12" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+        <text x="440" y="32" text-anchor="middle" fill="#8b949e" font-size="13" font-weight="600">AGENT LOOP — 核心循环（一次会话）</text>
+
+        <!-- Box 1: System Prompt -->
+        <rect x="30" y="50" width="820" height="108" rx="8" fill="#0d1117" stroke="#30363d" stroke-width="1.5"/>
+        <text x="440" y="74" text-anchor="middle" fill="#f5c518" font-size="15" font-weight="700">① 构建 System Prompt <tspan fill="#8b949e" font-size="11">（会话启动时一次性完成，后续不变）</tspan></text>
+        <text x="50" y="100" fill="#8b949e" font-size="11">Persona（人格）</text>
+        <text x="230" y="100" fill="#8b949e" font-size="11">SOUL.md（全局身份）</text>
+        <text x="410" y="100" fill="#8b949e" font-size="11">Memory（跨会话记忆）</text>
+        <text x="50" y="120" fill="#8b949e" font-size="11">Skills（加载的技能）</text>
+        <text x="230" y="120" fill="#8b949e" font-size="11">Project Context</text>
+        <text x="410" y="120" fill="#8b949e" font-size="11">Environment Hints</text>
+        <text x="50" y="140" fill="#8b949e" font-size="11">Available Tools（tool schemas）</text>
+        <text x="230" y="140" fill="#8b949e" font-size="11">Tool-Use Enforcement</text>
+        <text x="410" y="140" fill="#8b949e" font-size="11">User Messages（对话历史）</text>
+
+        <!-- Arrow 1→2 -->
+        <line x1="440" y1="162" x2="440" y2="210" stroke="#58a6ff" stroke-width="2" marker-end="url(#aB)"/>
+
+        <!-- Box 2: LLM -->
+        <rect x="280" y="216" width="320" height="52" rx="26" fill="#1a2a3e" stroke="#58a6ff" stroke-width="1.5"/>
+        <text x="440" y="238" text-anchor="middle" fill="#58a6ff" font-size="15" font-weight="700">② 调用 LLM</text>
+        <text x="440" y="258" text-anchor="middle" fill="#8b949e" font-size="11">发送 messages + tool schemas → LLM 返回结果</text>
+
+        <!-- Arrow down -->
+        <line x1="440" y1="270" x2="440" y2="308" stroke="#58a6ff" stroke-width="2"/>
+
+        <!-- Split point -->
+        <circle cx="440" cy="312" r="5" fill="#58a6ff"/>
+
+        <!-- Left: Tool Call -->
+        <line x1="436" y1="312" x2="180" y2="312" stroke="#3fb950" stroke-width="2"/>
+        <line x1="180" y1="312" x2="180" y2="348" stroke="#3fb950" stroke-width="2" marker-end="url(#aG)"/>
+        <text x="310" y="306" fill="#3fb950" font-size="12" font-weight="600">LLM 返回 Tool Call</text>
+
+        <rect x="80" y="353" width="200" height="80" rx="8" fill="#0d2a1a" stroke="#3fb950" stroke-width="1.5"/>
+        <text x="180" y="380" text-anchor="middle" fill="#3fb950" font-size="14" font-weight="700">③a 执行工具</text>
+        <text x="180" y="400" text-anchor="middle" fill="#8b949e" font-size="11">终端 / 文件读写 / 浏览器</text>
+        <text x="180" y="418" text-anchor="middle" fill="#8b949e" font-size="11">结果追加到对话上下文</text>
+
+        <!-- Right: Text -->
+        <line x1="444" y1="312" x2="700" y2="312" stroke="#a371f7" stroke-width="2"/>
+        <line x1="700" y1="312" x2="700" y2="348" stroke="#a371f7" stroke-width="2" marker-end="url(#aP)"/>
+        <text x="570" y="306" fill="#a371f7" font-size="12" font-weight="600">LLM 返回文本</text>
+
+        <rect x="600" y="353" width="200" height="80" rx="8" fill="#1e1a2e" stroke="#a371f7" stroke-width="1.5"/>
+        <text x="700" y="380" text-anchor="middle" fill="#a371f7" font-size="14" font-weight="700">③b 返回给用户</text>
+        <text x="700" y="400" text-anchor="middle" fill="#8b949e" font-size="11">LLM 认为任务完成</text>
+        <text x="700" y="418" text-anchor="middle" fill="#8b949e" font-size="11">格式化后投递到平台</text>
+
+        <!-- Loop-back -->
+        <path d="M 180 438 L 180 490 Q 180 510 210 510 L 280 510 Q 300 510 300 488 L 300 268"
+              fill="none" stroke="#3fb950" stroke-width="2" stroke-dasharray="7,4" marker-end="url(#aG)"/>
+        <path d="M 280 510 L 300 510" fill="none" stroke="#3fb950" stroke-width="2"/>
+        <rect x="210" y="496" width="100" height="22" rx="4" fill="#0d2a1a" stroke="#3fb950" stroke-width="1"/>
+        <text x="260" y="512" text-anchor="middle" fill="#3fb950" font-size="11" font-weight="600">循环继续</text>
+
+        <!-- Guard rails -->
+        <rect x="160" y="570" width="560" height="60" rx="8" fill="#1a1a2e" stroke="#d2991d" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="440" y="594" text-anchor="middle" fill="#d2991d" font-size="13" font-weight="700">⚠ 循环防护机制</text>
+        <text x="440" y="616" text-anchor="middle" fill="#8b949e" font-size="11">上限 <tspan fill="#f85149">max_turns=90</tspan>（默认） · Context 超 token 上限自动 <tspan fill="#f85149">Compression</tspan> · 防止无限循环</text>
+
+        <!-- Floor -->
+        <rect x="620" y="570" width="180" height="40" rx="8" fill="#0d2a1a" stroke="#3fb950" stroke-width="1"/>
+        <text x="710" y="594" text-anchor="middle" fill="#3fb950" font-size="13" font-weight="700">✅ 会话结束</text>
+      </svg>
+    </div>
+
+    <h3 class="sub-title">📐 关键概念拆解</h3>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Turn（轮次）</h3>
+        <p><strong>1 次 LLM API 调用 = 1 个 Turn</strong>。如果 LLM 返回了 Tool Call，Agent 执行工具后把结果追加回 messages，<strong>这不算新 Turn</strong>——它只是当前 Turn 内的子步骤。</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--orange);">举例：上面 FastAPI 的例子中，6 步（5 次 Tool Call + 1 次文本回复）发生在 <strong>1 个 Turn</strong> 内。</p>
+      </div>
+      <div class="card">
+        <h3>并行 Tool Call</h3>
+        <p>LLM 可以一次返回多个 tool call（如同时创建 3 个文件），Hermes <strong>并行执行</strong>它们，而不是串行等待。</p>
+        <p style="margin-top:8px;font-size:13px;">这大幅减少了 API 往返次数，显著提升效率。</p>
+      </div>
+      <div class="card">
+        <h3>Prompt Caching</h3>
+        <p>System Prompt 在会话内<strong>不变</strong>，LLM Provider 可以缓存它。</p>
+        <p style="margin-top:8px;font-size:13px;color:var(--orange);">后果：换工具、换技能、改配置后必须 <code>/reset</code>——改任何 System Prompt 内容都会破坏缓存，需要新会话重新加载。</p>
+      </div>
+      <div class="card">
+        <h3>Context Compression</h3>
+        <p>对话历史太长时，Hermes 自动压缩旧消息（摘要化），确保不超出模型的 token 上限。</p>
+        <p style="margin-top:8px;font-size:13px;">默认策略：上下文使用率超过 50% 时触发，压缩到 20%。</p>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="label">📌 本节要点</div>
+      <ul>
+        <li>Agent Loop = <strong>Prompt → LLM → 工具执行 → 结果追加 → 循环</strong></li>
+        <li>一次用户消息可能触发多个 Turn，每个 Turn 内可能有多次工具调用</li>
+        <li>LLM 每次只决定 <strong>下一步做什么</strong>，不一次性规划全部</li>
+        <li>防护机制：max_turns + Compression 防止失控</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 3. Directory Structure ═══════════════ -->
+  <section id="s3">
+    <div class="section-title"><span class="num">3</span> 关键目录结构</div>
+    <div class="section-subtitle">所有数据默认存在 <code>~/.hermes/</code>，可通过 <code>$HERMES_HOME</code> 环境变量自定义路径</div>
+
+    <div class="dir-tree">
+      <span class="dir">~/.hermes/</span>                          <span class="cmt">← 数据根目录</span><br>
+      <span class="file">├── <span class="hl">config.yaml</span></span>           <span class="cmt">← 主配置文件（模型、Agent 参数、压缩策略…）</span><br>
+      <span class="file">├── <span class="hl">.env</span></span>                  <span class="cmt">← API Key 等密钥（不入 git，与 config 分离）</span><br>
+      <span class="file">├── SOUL.md</span>                      <span class="cmt">← Agent 全局人格定义（始终加载）</span><br>
+      <span class="dir">├── skills/</span>                        <span class="cmt">← 安装的技能文件（.md，按分类分目录存放）</span><br>
+      <span class="file">├── state.db</span>                      <span class="cmt">← SQLite 会话数据库（FTS5 全文搜索）</span><br>
+      <span class="dir">├── sessions/</span>                      <span class="cmt">← 会话路由索引 + 请求日志</span><br>
+      <span class="dir">├── logs/</span>                          <span class="cmt">← Gateway 日志 + 错误日志</span><br>
+      <span class="dir">├── auth.json</span>                      <span class="cmt">← OAuth token + 凭证池</span><br>
+      <span class="dir">└── profiles/</span>                      <span class="cmt">← 多 Profile 隔离目录</span><br>
+      <span class="dir">    └── default/</span>                    <span class="cmt">← 默认 profile（config.yaml + .env + skills）</span><br>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>📝 config.yaml</h3>
+        <p>控制 Agent 全部行为的核心文件。包括：模型选择、Agent 参数（max_turns）、终端后端、压缩策略、Memory、委托配置等。</p>
+        <p style="margin-top:8px;"><code>hermes config edit</code> 直接编辑</p>
+      </div>
+      <div class="card">
+        <h3>🔐 .env</h3>
+        <p>存放 API Key、Token。和 config.yaml 分离是为了<strong>密钥不入 git</strong>——config 可以分享，.env 绝对不能。</p>
+        <p style="margin-top:8px;"><code>hermes config env-path</code> 查看路径</p>
+      </div>
+      <div class="card">
+        <h3>🗄️ state.db</h3>
+        <p>SQLite 数据库，存储所有会话的完整历史消息。内置 FTS5 全文搜索引擎——Agent 可以搜索任意历史对话。</p>
+        <p style="margin-top:8px;">这也是 <code>session_search</code> 工具的数据来源。</p>
+      </div>
+      <div class="card">
+        <h3>👤 profiles/</h3>
+        <p>多套独立配置的隔离目录。每个 profile 有自己的 config.yaml、.env、skills、memory——就像一个独立的人格分身。</p>
+        <p style="margin-top:8px;">比如：一个 profile 连公司 GitLab，另一个连个人 GitHub。</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <strong>💡 实用技巧：</strong>如果你想让两个项目使用完全不同的 Agent 配置（不同模型、不同工具、不同记忆），创建两个 Profile 比手动切配置方便得多。<code>hermes --profile work</code> vs <code>hermes --profile personal</code>。
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 4. System Prompt ═══════════════ -->
+  <section id="s4">
+    <div class="section-title"><span class="num">4</span> System Prompt 是怎么拼出来的？</div>
+    <div class="section-subtitle">每次新会话启动时，Hermes 把所有"背景知识"拼接成一个巨大的系统提示词发给 LLM</div>
+
+    <p>理解 System Prompt 的拼接逻辑非常重要——因为<strong>Agent 的"认知边界"完全由它决定</strong>。Agent 能看到什么、知道什么、能做什么，都在这里。</p>
+
+    <h3 class="sub-title">🧱 8 层叠加结构</h3>
+
+    <div class="stack">
+      <div class="l">
+        <span class="lt">Layer 1 · Agent Persona（角色定义）</span>
+        <span class="ln">"你叫 Hermes，是一个万能的机器人助手…"</span>
+      </div>
+      <div class="l">
+        <span class="lt">Layer 2 · SOUL.md（全局身份文件）</span>
+        <span class="ln">$HERMES_HOME/SOUL.md — 独立于项目，始终加载</span>
+      </div>
+      <div class="l">
+        <span class="lt">Layer 3 · User Profile（用户画像）</span>
+        <span class="ln">Memory: 姓名、偏好、环境设置…</span>
+      </div>
+      <div class="l">
+        <span class="lt">Layer 4 · Agent Memory（Agent 自己的笔记）</span>
+        <span class="ln">Memory: 项目路径、工具版本、经验教训…</span>
+      </div>
+      <div class="l">
+        <span class="lt">Layer 5 · Active Skills（加载的技能文档）</span>
+        <span class="ln">当前会话中 <code>/skill name</code> 或 <code>--skills</code> 加载的 SKILL.md</span>
+      </div>
+      <div class="l">
+        <span class="lt">Layer 6 · Project Context（项目上下文）</span>
+        <span class="ln">.hermes.md / AGENTS.md / CLAUDE.md / .cursorrules <strong>（先到先得）</strong></span>
+      </div>
+      <div class="l">
+        <span class="lt">Layer 7 · Environment Hints（环境信息）</span>
+        <span class="ln">OS: Linux x86_64 · Shell: bash · CWD: ~/projects</span>
+      </div>
+      <div class="l">
+        <span class="lt">Layer 8 · Available Tools + Tool-Use Enforcement</span>
+        <span class="ln">所有可用工具的 JSON Schema + "你必须用工具做事，不能只描述"</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>💡 加载优先级（越靠上越核心）：</strong><br>
+      Persona &gt; SOUL.md &gt; Memory &gt; Skills &gt; Project Context<br><br>
+      这意味着：<strong>Persona 里的指令优先级最高</strong>，不会被 Skills 或 Project Context 覆盖。如果你在 Persona 里写了"不要说谢谢"，即使 Skill 里建议说谢谢，Agent 也不会说。
+    </div>
+
+    <h3 class="sub-title">📁 Project Context 文件的发现规则</h3>
+
+    <table class="compare-table">
+      <thead>
+        <tr><th>文件</th><th style="width:200px">发现方式</th><th>适用场景</th></tr>
+      </thead>
+      <tr>
+        <td><code>.hermes.md</code> / <code>HERMES.md</code></td>
+        <td><strong>从当前目录向上遍历到 git root</strong></td>
+        <td>Hermes 专属，支持根目录 + 子目录层级继承</td>
+      </tr>
+      <tr>
+        <td><code>AGENTS.md</code> / <code>agents.md</code></td>
+        <td><strong>仅当前工作目录</strong></td>
+        <td>跨 Agent 可移植（Claude Code / Codex 都认）</td>
+      </tr>
+      <tr>
+        <td><code>CLAUDE.md</code></td>
+        <td>仅当前目录</td>
+        <td>Claude Code 风格，与 AGENTS.md 同类</td>
+      </tr>
+      <tr>
+        <td><code>.cursorrules</code></td>
+        <td>仅当前目录</td>
+        <td>从 Cursor IDE 迁移时使用</td>
+      </tr>
+    </table>
+
+    <p style="font-size:14px;color:var(--text2);">规则：<strong>先到先得</strong>——按上表优先级找到第一个就停止，不叠加。单个文件上限 20,000 字符，超出部分自动截断（保留头尾）。</p>
+
+    <div class="takeaway">
+      <div class="label">📌 本节要点</div>
+      <ul>
+        <li>System Prompt = 8 层内容叠加，决定了 Agent 的"认知世界"</li>
+        <li>会话内不变 → 支持 Prompt Caching → 换任何内容都要 <code>/reset</code></li>
+        <li>Project Context <strong>先到先得不叠加</strong>——.hermes.md 和 AGENTS.md 只加载一个</li>
+        <li>Persona 优先级最高，是 Agent 行为的最底层约束</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 5. Data Flow ═══════════════ -->
+  <section id="s5">
+    <div class="section-title"><span class="num">5</span> 一次请求的完整数据流</div>
+    <div class="section-subtitle">假设用户通过飞书发送一条消息，追踪它的全链路——从平台适配到 LLM 再到返回</div>
+
+    <div class="flow-container">
+      <svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="dB" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#58a6ff"/>
+          </marker>
+          <marker id="dG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#3fb950"/>
+          </marker>
+          <marker id="dP" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#a371f7"/>
+          </marker>
+          <marker id="dR" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#f85149"/>
+          </marker>
+        </defs>
+
+        <rect x="0" y="0" width="900" height="560" rx="12" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+        <text x="450" y="28" text-anchor="middle" fill="#8b949e" font-size="13" font-weight="600">一次用户消息的全链路追踪</text>
+
+        <!-- User icon -->
+        <circle cx="55" cy="85" r="22" fill="#1a1a2e" stroke="#a371f7" stroke-width="2"/>
+        <text x="55" y="90" text-anchor="middle" fill="#a371f7" font-size="16">👤</text>
+        <text x="55" y="125" text-anchor="middle" fill="#8b949e" font-size="11">用户发送消息</text>
+
+        <!-- Arrow: User → Adapter -->
+        <line x1="80" y1="85" x2="175" y2="85" stroke="#a371f7" stroke-width="2" marker-end="url(#dP)"/>
+
+        <!-- Step 1: Platform Adapter -->
+        <rect x="180" y="50" width="200" height="70" rx="8" fill="#1e1a2e" stroke="#a371f7" stroke-width="1.5"/>
+        <text x="280" y="73" text-anchor="middle" fill="#a371f7" font-size="13" font-weight="700">🟣 平台适配器</text>
+        <text x="280" y="93" text-anchor="middle" fill="#8b949e" font-size="10">Gateway 收到消息</text>
+        <text x="280" y="109" text-anchor="middle" fill="#8b949e" font-size="10">创建/恢复会话上下文</text>
+
+        <!-- Arrow: Adapter → Agent Loop -->
+        <line x1="385" y1="85" x2="455" y2="85" stroke="#58a6ff" stroke-width="2" marker-end="url(#dB)"/>
+
+        <!-- Step 2: Agent Loop -->
+        <rect x="460" y="42" width="220" height="86" rx="8" fill="#1a2a3e" stroke="#58a6ff" stroke-width="1.5"/>
+        <text x="570" y="64" text-anchor="middle" fill="#58a6ff" font-size="13" font-weight="700">🔵 Agent Loop 启动</text>
+        <text x="570" y="84" text-anchor="middle" fill="#8b949e" font-size="10">读 state.db 加载历史</text>
+        <text x="570" y="100" text-anchor="middle" fill="#8b949e" font-size="10">注入 Persona+Memory+Skills</text>
+        <text x="570" y="116" text-anchor="middle" fill="#8b949e" font-size="10">构建完整 System Prompt</text>
+
+        <!-- Arrow: Agent Loop → LLM -->
+        <line x1="570" y1="132" x2="570" y2="180" stroke="#58a6ff" stroke-width="2" marker-end="url(#dB)"/>
+
+        <!-- Step 3: LLM -->
+        <rect x="420" y="185" width="300" height="52" rx="8" fill="#0f3460" stroke="#f5c518" stroke-width="1.5"/>
+        <text x="570" y="207" text-anchor="middle" fill="#f5c518" font-size="13" font-weight="700">🟡 LLM API 调用</text>
+        <text x="570" y="227" text-anchor="middle" fill="#8b949e" font-size="10">POST → Provider（返回 tool_calls 或 text）</text>
+
+        <!-- Arrow down from LLM -->
+        <line x1="570" y1="240" x2="570" y2="282" stroke="#58a6ff" stroke-width="2"/>
+
+        <!-- Decision point -->
+        <circle cx="570" cy="287" r="5" fill="#d2991d"/>
+
+        <!-- Left: Tool Call -->
+        <line x1="565" y1="287" x2="280" y2="287" stroke="#f85149" stroke-width="2"/>
+        <line x1="280" y1="287" x2="280" y2="330" stroke="#f85149" stroke-width="2" marker-end="url(#dR)"/>
+
+        <rect x="180" y="335" width="200" height="70" rx="8" fill="#2a1a1a" stroke="#f85149" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <text x="280" y="358" text-anchor="middle" fill="#f85149" font-size="12" font-weight="700">🔴 Tool Call 分支</text>
+        <text x="280" y="378" text-anchor="middle" fill="#8b949e" font-size="10">执行工具→结果追加→回到 LLM</text>
+        <text x="280" y="394" text-anchor="middle" fill="#d2991d" font-size="9">（循环，可能多次）</text>
+
+        <!-- Loop-back hint arrow -->
+        <path d="M 280 410 L 280 450 Q 280 468 300 468 L 420 468 Q 440 468 440 446 L 440 237"
+              fill="none" stroke="#f85149" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#dR)"/>
+
+        <!-- Right: Text -->
+        <line x1="575" y1="287" x2="760" y2="287" stroke="#3fb950" stroke-width="2"/>
+        <line x1="760" y1="287" x2="760" y2="330" stroke="#3fb950" stroke-width="2" marker-end="url(#dG)"/>
+
+        <rect x="660" y="335" width="200" height="70" rx="8" fill="#0d2a1a" stroke="#3fb950" stroke-width="1.5"/>
+        <text x="760" y="358" text-anchor="middle" fill="#3fb950" font-size="12" font-weight="700">🟢 文本回复分支</text>
+        <text x="760" y="378" text-anchor="middle" fill="#8b949e" font-size="10">LLM 认为任务完成</text>
+        <text x="760" y="394" text-anchor="middle" fill="#8b949e" font-size="10">格式化 Markdown 输出</text>
+
+        <!-- Arrow: Text → Adapter → User -->
+        <path d="M 760 410 L 760 450 Q 760 470 740 470 L 400 470 Q 380 470 380 450 L 380 120"
+              fill="none" stroke="#3fb950" stroke-width="2"/>
+        <line x1="380" y1="120" x2="200" y2="120" stroke="#3fb950" stroke-width="2" marker-end="url(#dG)"/>
+
+        <!-- Adapter delivers -->
+        <rect x="180" y="445" width="200" height="50" rx="8" fill="#1e1a2e" stroke="#a371f7" stroke-width="1"/>
+        <text x="280" y="468" text-anchor="middle" fill="#a371f7" font-size="11" font-weight="700">🟣 平台适配器投递</text>
+        <text x="280" y="486" text-anchor="middle" fill="#8b949e" font-size="10">适配格式 → 发送到平台</text>
+
+        <!-- Arrow: Adapter → User -->
+        <line x1="175" y1="120" x2="82" y2="120" stroke="#a371f7" stroke-width="2" marker-end="url(#dP)"/>
+
+        <!-- User receives -->
+        <circle cx="55" cy="120" r="22" fill="#0d2a1a" stroke="#3fb950" stroke-width="2"/>
+        <text x="55" y="125" text-anchor="middle" fill="#3fb950" font-size="16">✅</text>
+        <text x="55" y="155" text-anchor="middle" fill="#8b949e" font-size="11">用户收到回复</text>
+      </svg>
+    </div>
+
+    <h3 class="sub-title">🔀 两条路径的对比</h3>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>🔴 Tool Call 路径</h3>
+        <p>LLM 认为信息不足、需要外部操作时走这条路径。</p>
+        <ul style="margin-top:8px;padding-left:18px;">
+          <li>Agent 执行工具（终端 / 文件 / 浏览器…）</li>
+          <li>工具输出追加到 messages</li>
+          <li><strong>再次调用 LLM</strong>（带工具结果）</li>
+          <li>LLM 重新判断：继续 Tool Call 还是给文本回复</li>
+          <li>循环，上限 max_turns=90</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>🟢 文本回复路径</h3>
+        <p>LLM 认为信息足够、可以直接回答时走这条路径。</p>
+        <ul style="margin-top:8px;padding-left:18px;">
+          <li>LLM 返回纯文本（不调用工具）</li>
+          <li>Agent 结束当前 Turn</li>
+          <li>文本经由平台适配器格式化</li>
+          <li>投递到用户所在平台（飞书/Telegram/…）</li>
+          <li>✅ 等待用户下一条消息</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="label">📌 本节要点</div>
+      <ul>
+        <li>平台适配器（Gateway）负责消息收发，Agent Loop 负责"思考+行动"</li>
+        <li>LLM 是关键决策者——每次返回 Tool Call 还是文本，由 LLM 决定</li>
+        <li>Tool Call 路径可能循环多次，直到 LLM 满意为止</li>
+        <li>state.db 是会话持久化的核心——适配器和 Agent Loop 都读写它</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 6. Glossary ═══════════════ -->
+  <section id="s6">
+    <div class="section-title"><span class="num">6</span> 核心术语速查表</div>
+    <div class="section-subtitle">后续模块会反复出现的概念，现在混个脸熟，回头查也方便</div>
+
+    <div class="glossary-grid">
+      <div class="glossary-card">
+        <div class="emoji">🔄</div>
+        <div class="title">Agent Loop</div>
+        <div class="desc">Prompt → LLM → 工具 → 循环。Agent 工作的核心引擎。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">📋</div>
+        <div class="title">System Prompt</div>
+        <div class="desc">8 层内容拼成的"世界观"，决定了 Agent 的认知边界。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">🔁</div>
+        <div class="title">Turn</div>
+        <div class="desc">1 次 LLM 调用及随后的所有工具执行。上限 90。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">🗜️</div>
+        <div class="title">Compression</div>
+        <div class="desc">历史太长时自动压缩，防止超出 token 限制。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">🌐</div>
+        <div class="title">Gateway</div>
+        <div class="desc">多平台接入层。飞书/Telegram/Discord 等统一适配。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">🗄️</div>
+        <div class="title">state.db</div>
+        <div class="desc">SQLite 会话存储 + FTS5 搜索。跨会话可回溯。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">🧠</div>
+        <div class="title">Memory</div>
+        <div class="desc">跨会话持久记忆。User Profile + Agent Memory 两类。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">🛠️</div>
+        <div class="title">Toolset</div>
+        <div class="desc">工具按功能分组。按需启用/禁用，控制能力边界。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">📚</div>
+        <div class="title">Skill</div>
+        <div class="desc">可复用的过程知识文档。Agent 自我进化的核心机制。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">👤</div>
+        <div class="title">Profile</div>
+        <div class="desc">多套配置隔离。不同场景用不同"人格分身"。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">⏰</div>
+        <div class="title">Cron Job</div>
+        <div class="desc">定时自动任务。Agent 在无人值守时自主运行。</div>
+      </div>
+      <div class="glossary-card">
+        <div class="emoji">🤝</div>
+        <div class="title">Delegation</div>
+        <div class="desc">派生子 Agent 处理子任务。并行提效。</div>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 7. FAQ ═══════════════ -->
+  <section id="s7">
+    <div class="section-title"><span class="num">7</span> 常见疑问</div>
+    <div class="section-subtitle">初学时最容易被问到的问题</div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q: Hermes 和 LangChain / AutoGPT 有什么区别？</div>
+      <div class="faq-a">
+        LangChain 是一个<strong>开发框架</strong>——你用它来<strong>构建</strong> Agent。Hermes 是<strong>成品 Agent</strong>——你直接用它干活。<br>
+        AutoGPT 是早期的自主 Agent 实验项目，已基本不维护。Hermes 更工程化、更稳定、生态更完整。
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q: Agent Loop 会不会死循环？</div>
+      <div class="faq-a">
+        不会。有三层保护：<br>
+        ① <code>max_turns=90</code>——到上限强制终止<br>
+        ② Context Compression——token 快满时自动压缩，不完全依赖 turn 计数<br>
+        ③ 模型本身有判断力——当它觉得"可以回答了"就会返回文本，不走 Tool Call
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q: state.db 存了所有对话，隐私怎么办？</div>
+      <div class="faq-a">
+        数据完全在本地，不上传任何第三方服务器。你可以随时删除：<br>
+        <code>hermes sessions prune --older-than 30</code> 删除 30 天前的会话<br>
+        也可以配置 <code>privacy.redact_pii: true</code> 在发给 LLM 前自动脱敏用户信息。
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q: 我能用本地模型（Ollama / llama.cpp）跑 Hermes 吗？</div>
+      <div class="faq-a">
+        可以。Hermes 支持任何 OpenAI 兼容的 API 端点。配置 <code>model.base_url</code> 指向本地服务即可。<br>
+        不过建议用足够强的模型（70B+ 或等价的），否则工具调用的准确度会下降。
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Q: 我能同时用多个 LLM Provider 吗？</div>
+      <div class="faq-a">
+        可以。Hermes 支持 <strong>Credential Pool</strong>——配置多个同 Provider 的 API Key，自动轮转避免限流。<br>
+        不同 Provider 之间可以用 <code>hermes model</code> 随时切换，改完 <code>/reset</code> 生效。
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ PAGE NAV ═══════════════ -->
+  <div class="page-nav">
+    <span></span>
+    <a href="#">下一模块：安装、配置与 Provider →</a>
+  </div>
+
+</div>
+
+</body>
+</html>
