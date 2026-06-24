@@ -198,10 +198,10 @@ function toggleTheme(){var h=document.documentElement;var n=h.getAttribute('data
     <div class="section-title"><span class="num">4</span> .env 密钥管理</div>
     <div class="code-block">
       <span class="c1"># 典型 .env</span><br>
-      <span class="c4">OPENROUTER_API_KEY</span>=sk-or-...xxxx<br>
-      <span class="c4">ANTHROPIC_API_KEY</span>=sk-ant-...xxxx<br>
-      <span class="c4">DEEPSEEK_API_KEY</span>=sk-xxx...xxxx<br>
-      <span class="c4">HERMES_HOME</span>=/opt/data &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 可选：自定义数据目录</span>
+      <span class="c4">OPENROUTER_API_KEY</span>=YOUR_API_KEY<br>
+      <span class="c4">ANTHROPIC_API_KEY</span>=YOUR_API_KEY<br>
+      <span class="c4">DEEPSEEK_API_KEY</span>=YOUR_DEEPSEEK_KEY<br>
+      <span class="c4">HERMES_HOME</span>=/home/user/.hermes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 可选：自定义数据目录</span>
     </div>
     <div class="card-grid">
       <div class="card"><h3>🔐 为什么分离？</h3><p><code>config.yaml</code> 可分享可入 git。 <code>.env</code> <strong>绝对不能入 git</strong>——加到 <code>.gitignore</code>。密钥和配置分离是安全底线。</p></div>
@@ -277,8 +277,8 @@ function toggleTheme(){var h=document.documentElement;var n=h.getAttribute('data
     <div class="mermaid-wrap">
       <div class="mermaid">
 flowchart TD
-    A["Key 0 · 活跃<br/>sk-or-xxxx..."] --> D["🔄 轮转选择器<br/>返回活跃的 Key"]
-    B["Key 1 · 备用<br/>sk-or-yyyy..."] --> D
+    A["Key 0 · 活跃<br/>***..."] --> D["🔄 轮转选择器<br/>返回活跃的 Key"]
+    B["Key 1 · 备用<br/>***..."] --> D
     C["Key 2 · 已耗尽<br/>rate limited"] -.->|"跳过"| D
     D --> E["✅ 始终使用可用 Key"]
       </div>

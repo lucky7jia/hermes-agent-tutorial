@@ -72,9 +72,9 @@ hermes config path         # 打印路径
 ## 4. .env 密钥管理
 
 ```
-OPENROUTER_API_KEY=sk-or-...xxxx
-ANTHROPIC_API_KEY=sk-ant-...xxxx
-DEEPSEEK_API_KEY=sk-xxx...xxxx
+OPENROUTER_API_KEY=YOUR_API_KEY
+ANTHROPIC_API_KEY=YOUR_API_KEY
+DEEPSEEK_API_KEY=YOUR_DEEPSEEK_KEY
 GEMINI_API_KEY=AIzaxxxxxx
 ```
 
