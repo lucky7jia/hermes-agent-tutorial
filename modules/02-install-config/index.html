@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>模块 2：安装、配置与 Provider — Hermes Agent 完全学习手册</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
 <style>
   :root {
     --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
@@ -13,93 +14,70 @@
     --font: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
     --mono: 'JetBrains Mono','Cascadia Code','Consolas','SF Mono',monospace;
     --radius: 8px; --radius-lg: 12px;
+    --mm-bg: #161b22; --mm-node-bg: #21262d; --mm-node-border: #58a6ff;
+    --mm-line: #8b949e; --mm-text: #e6edf3;
+  }
+  [data-theme="light"] {
+    --bg: #ffffff; --surface: #f6f8fa; --surface2: #eaeef2; --border: #d0d7de;
+    --text: #1f2328; --text2: #656d76; --text3: #8c959f;
+    --accent: #0969da; --accent2: #0550ae; --green: #1a7f37;
+    --orange: #9a6700; --red: #cf222e; --purple: #8250df; --teal: #1b7c83;
+    --mm-bg: #ffffff; --mm-node-bg: #f6f8fa; --mm-node-border: #0969da;
+    --mm-line: #656d76; --mm-text: #1f2328;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:var(--font); line-height:1.8; font-size:15px; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font); line-height:1.8; font-size:15px; transition:background .3s,color .3s; }
   .container { max-width:920px; margin:0 auto; padding:50px 24px 80px; }
-
+  .theme-toggle { position:fixed; top:16px; right:16px; z-index:100; width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:var(--surface); color:var(--text); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+  .theme-toggle:hover { border-color:var(--accent); }
   .hero { text-align:center; padding:60px 0 32px; border-bottom:1px solid var(--border); margin-bottom:40px; }
   .hero .badge { display:inline-block; background:var(--surface2); color:var(--accent); padding:4px 16px; border-radius:20px; font-size:13px; font-weight:600; margin-bottom:16px; }
-  .hero h1 { font-size:44px; font-weight:800; letter-spacing:-1.5px; line-height:1.2;
-    background:linear-gradient(135deg,#58a6ff 0%,#a371f7 45%,#39d2c0 100%);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; }
+  .hero h1 { font-size:44px; font-weight:800; letter-spacing:-1.5px; line-height:1.2; background:linear-gradient(135deg,var(--accent) 0%,var(--purple) 45%,var(--teal) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; }
   .hero .subtitle { color:var(--text2); font-size:17px; max-width:620px; margin:0 auto 8px; }
   .hero .meta { color:var(--text3); font-size:13px; }
-
   .toc { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 28px; margin:24px 0; }
   .toc h3 { font-size:15px; margin-bottom:12px; color:var(--accent); }
-  .toc ol { padding-left:20px; }
-  .toc li { margin:4px 0; color:var(--text2); font-size:14px; }
-  .toc li a { color:var(--accent2); text-decoration:none; }
-  .toc li a:hover { text-decoration:underline; }
-
+  .toc ol { padding-left:20px; } .toc li { margin:4px 0; color:var(--text2); font-size:14px; } .toc li a { color:var(--accent2); text-decoration:none; } .toc li a:hover { text-decoration:underline; }
   section { margin:48px 0; }
   .section-title { font-size:26px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:10px; padding-bottom:10px; border-bottom:1px solid var(--border); }
-  .section-title .num { background:var(--accent); color:#000; min-width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; flex-shrink:0; }
+  .section-title .num { background:var(--accent); color:#fff; min-width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; flex-shrink:0; }
   .section-subtitle { color:var(--text2); font-size:14px; margin-bottom:24px; margin-top:4px; }
   .sub-title { font-size:19px; font-weight:700; margin:28px 0 12px; color:var(--accent2); }
-
   .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; margin:16px 0; }
-  .card h3 { font-size:16px; margin-bottom:8px; }
-  .card p,.card li { color:var(--text2); font-size:14px; }
+  .card h3 { font-size:16px; margin-bottom:8px; } .card p,.card li { color:var(--text2); font-size:14px; }
   .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:16px 0; }
-
   .compare-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:14px; }
   .compare-table thead th { background:var(--surface2); text-align:left; padding:10px 16px; font-weight:600; border-bottom:1px solid var(--border); }
-  .compare-table td { padding:10px 16px; border-bottom:1px solid rgba(48,54,61,0.5); vertical-align:top; }
-  .compare-table tr:last-child td { border-bottom:none; }
-  .compare-table .c1 { color:var(--green); font-weight:600; }
-  .compare-table .c2 { color:var(--red); }
-
+  .compare-table td { padding:10px 16px; border-bottom:1px solid rgba(128,128,128,0.15); vertical-align:top; }
+  .compare-table tr:last-child td { border-bottom:none; } .compare-table .c1 { color:var(--green); font-weight:600; } .compare-table .c2 { color:var(--red); }
   .code-block { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; margin:12px 0; font-family:var(--mono); font-size:13px; line-height:1.6; overflow-x:auto; color:var(--text); }
-  .code-block .c1 { color:var(--text3); }
-  .code-block .c2 { color:var(--accent2); }
-  .code-block .c3 { color:var(--green); }
-  .code-block .c4 { color:var(--purple); }
-
-  .flow-container { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; margin:16px 0; overflow-x:auto; }
-  .flow-container svg { display:block; margin:0 auto; max-width:100%; }
-
-  .callout { border-left:3px solid var(--accent); padding:12px 16px; margin:16px 0; background:rgba(88,166,255,0.06); border-radius:0 var(--radius) var(--radius) 0; font-size:14px; }
-  .callout.warn { border-color:var(--orange); background:rgba(210,153,29,0.06); }
-  .callout.tip { border-color:var(--green); background:rgba(63,185,80,0.06); }
-  .callout.think { border-color:var(--purple); background:rgba(163,113,247,0.06); }
-
-  .takeaway { background:linear-gradient(135deg,rgba(88,166,255,0.08),rgba(163,113,247,0.08)); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px 20px; margin:20px 0; }
-  .takeaway .label { font-size:12px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
-  .takeaway ul { padding-left:18px; }
-  .takeaway li { font-size:14px; margin:3px 0; }
-
+  .code-block .c1 { color:var(--text3); } .code-block .c2 { color:var(--accent2); } .code-block .c3 { color:var(--green); } .code-block .c4 { color:var(--purple); }
+  .mermaid-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; margin:16px 0; overflow-x:auto; }
+  .mermaid-wrap svg { width: 100% !important; max-width: 100% !important; height: auto !important; }
   .config-tree { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 24px; margin:16px 0; font-family:var(--mono); font-size:13px; line-height:1.8; }
-  .config-tree .key { color:var(--accent2); font-weight:600; }
-  .config-tree .val { color:var(--green); }
-  .config-tree .cmt { color:var(--text3); font-style:italic; }
-
-  .faq-item { margin:12px 0; }
-  .faq-q { font-weight:700; color:var(--accent2); font-size:15px; }
-  .faq-a { color:var(--text2); font-size:14px; padding:6px 0 12px 16px; }
-
+  .config-tree .key { color:var(--accent2); font-weight:600; } .config-tree .val { color:var(--green); } .config-tree .cmt { color:var(--text3); font-style:italic; }
+  .callout { border-left:3px solid var(--accent); padding:12px 16px; margin:16px 0; background:color-mix(in srgb,var(--accent) 6%,transparent); border-radius:0 var(--radius) var(--radius) 0; font-size:14px; }
+  .callout.warn { border-color:var(--orange); background:color-mix(in srgb,var(--orange) 6%,transparent); }
+  .callout.tip { border-color:var(--green); background:color-mix(in srgb,var(--green) 6%,transparent); }
+  .callout.think { border-color:var(--purple); background:color-mix(in srgb,var(--purple) 6%,transparent); }
+  .takeaway { background:color-mix(in srgb,var(--accent) 6%,transparent); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px 20px; margin:20px 0; }
+  .takeaway .label { font-size:12px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; } .takeaway ul { padding-left:18px; } .takeaway li { font-size:14px; margin:3px 0; }
+  .faq-item { margin:12px 0; } .faq-q { font-weight:700; color:var(--accent2); font-size:15px; } .faq-a { color:var(--text2); font-size:14px; padding:6px 0 12px 16px; }
   hr { border:none; border-top:1px solid var(--border); margin:40px 0; }
-  code { background:var(--surface2); padding:2px 6px; border-radius:4px; font-family:var(--mono); font-size:13px; }
-  strong { color:var(--text); }
+  p { margin:10px 0; } code { background:var(--surface2); padding:2px 6px; border-radius:4px; font-family:var(--mono); font-size:13px; color:var(--text); } strong { color:var(--text); }
   .page-nav { display:flex; justify-content:space-between; margin-top:48px; padding-top:20px; border-top:1px solid var(--border); }
-  .page-nav a { color:var(--accent); text-decoration:none; font-weight:600; }
-  .page-nav a:hover { text-decoration:underline; }
-
-  .chip { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; margin:2px; }
-  .chip.b { background:rgba(88,166,255,0.15); color:var(--accent); }
-  .chip.g { background:rgba(63,185,80,0.15); color:var(--green); }
-  .chip.o { background:rgba(210,153,29,0.15); color:var(--orange); }
-
-  @media (max-width:768px) {
-    .container { padding:24px 16px 48px; }
-    .hero h1 { font-size:30px; }
-    .section-title { font-size:22px; }
-    .card-grid { grid-template-columns:1fr; }
-  }
+  .page-nav a { color:var(--accent); text-decoration:none; font-weight:600; } .page-nav a:hover { text-decoration:underline; }
+  @media (max-width:768px) { .container { padding:24px 16px 48px; } .hero h1 { font-size:30px; } .section-title { font-size:22px; } .card-grid { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
+<button class="theme-toggle" onclick="toggleTheme()" title="切换亮色/暗色主题">🌓</button>
+<script>
+const mermaidConfig={startOnLoad:true,securityLevel:'loose',theme:'base',themeVariables:{background:'var(--mm-bg)',primaryColor:'var(--mm-node-bg)',primaryBorderColor:'var(--mm-node-border)',primaryTextColor:'var(--mm-text)',lineColor:'var(--mm-line)',nodeBorder:'var(--mm-node-border)',clusterBkg:'var(--mm-node-bg)',clusterBorder:'var(--mm-node-border)',titleColor:'var(--mm-text)',edgeLabelBackground:'var(--mm-bg)',fontSize:'16px'},flowchart:{useMaxWidth:true,htmlLabels:true,curve:'basis',padding:24,nodeSpacing:55,rankSpacing:65}};
+function initM(){var s=getComputedStyle(document.documentElement);mermaidConfig.themeVariables.background=s.getPropertyValue('--mm-bg').trim();mermaidConfig.themeVariables.primaryColor=s.getPropertyValue('--mm-node-bg').trim();mermaidConfig.themeVariables.primaryBorderColor=s.getPropertyValue('--mm-node-border').trim();mermaidConfig.themeVariables.primaryTextColor=s.getPropertyValue('--mm-text').trim();mermaidConfig.themeVariables.lineColor=s.getPropertyValue('--mm-line').trim();mermaidConfig.themeVariables.clusterBkg=s.getPropertyValue('--mm-node-bg').trim();mermaidConfig.themeVariables.edgeLabelBackground=s.getPropertyValue('--mm-bg').trim();mermaid.initialize(mermaidConfig)}
+function toggleTheme(){var h=document.documentElement;var n=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('ht',n);initM();var cs=document.querySelectorAll('.mermaid');cs.forEach(function(c){c.removeAttribute('data-processed');if(c.firstChild)c.innerHTML=c.firstChild.textContent});mermaid.run({querySelector:'.mermaid'})}
+(function(){var s=localStorage.getItem('ht');if(s)document.documentElement.setAttribute('data-theme',s);initM()})()
+</script>
 
 <div class="container">
 
@@ -107,7 +85,7 @@
     <div class="badge">模块 2 / 10</div>
     <h1>安装、配置与 Provider</h1>
     <p class="subtitle">把 Hermes 跑起来——安装、看懂 config.yaml、接上你喜欢的 LLM 模型。</p>
-    <p class="meta">预计阅读时间：25 分钟 · 前置：模块 1（核心概念）</p>
+    <p class="meta">预计阅读时间：20 分钟 · 前置：<a href="../01-core-concepts/" style="color:var(--accent)">模块 1</a></p>
   </div>
 
   <div class="toc">
@@ -131,49 +109,27 @@
     <div class="section-subtitle">一条命令，60 秒搞定</div>
 
     <h3 class="sub-title">🐧 Linux / macOS / WSL2</h3>
-    <div class="code-block">
-      <span class="c1"># 一行安装</span><br>
-      curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
-    </div>
+    <div class="code-block"><span class="c1"># 一行安装</span><br>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash</div>
 
     <h3 class="sub-title">🪟 Windows (PowerShell)</h3>
-    <div class="code-block">
-      <span class="c1"># PowerShell 中运行</span><br>
-      iex (irm https://hermes-agent.nousresearch.com/install.ps1)
-    </div>
+    <div class="code-block"><span class="c1"># PowerShell</span><br>iex (irm https://hermes-agent.nousresearch.com/install.ps1)</div>
 
-    <h3 class="sub-title">📦 Hermes Desktop（Windows / macOS）</h3>
-    <p>如果你更喜欢图形界面，可以从 <a href="https://hermes-agent.nousresearch.com" style="color:var(--accent)">官网</a> 下载 Hermes Desktop 安装包。它自带 CLI + 桌面 GUI。</p>
+    <h3 class="sub-title">📦 Hermes Desktop</h3>
+    <p>图形界面用户可从<a href="https://hermes-agent.nousresearch.com" style="color:var(--accent)">官网</a>下载安装包，自带 CLI + 桌面 GUI。</p>
 
     <div class="callout">
       <strong>安装脚本做了什么？</strong><br>
-      ① 下载最新版本 → ② 解压到 <code>~/.hermes/hermes-agent/</code> → ③ 创建 <code>~/.local/bin/hermes</code> 软链接 → ④ 把 <code>~/.local/bin</code> 加入 PATH<br>
-      不会动你的系统 Python，不会污染全局环境。
+      ① 下载最新版 → ② 解压到 <code>~/.hermes/hermes-agent/</code> → ③ 创建 <code>~/.local/bin/hermes</code> 软链接 → ④ 加入 PATH<br>
+      不污染系统 Python，不碰全局环境。
     </div>
 
     <div class="card-grid">
-      <div class="card">
-        <h3>📁 安装后的目录</h3>
-        <p><code>~/.hermes/</code> 下的完整结构在模块 1 已详述。安装完成时只有 <code>hermes-agent/</code> 源码目录——其余目录在首次运行后自动创建。</p>
-      </div>
-      <div class="card">
-        <h3>🔧 更新</h3>
-        <p><code>hermes update</code> 一键更新到最新版。也可以重新运行安装脚本——它会覆盖旧版本，保留你的配置和会话数据。</p>
-      </div>
-      <div class="card">
-        <h3>🗑️ 卸载</h3>
-        <p><code>hermes uninstall</code> 干净卸载。如果需要完全清除所有数据，卸载后手动删除 <code>~/.hermes/</code>。</p>
-      </div>
+      <div class="card"><h3>📁 安装后</h3><p><code>~/.hermes/</code> 下的完整结构在模块 1 已详述。安装完成时只有源码目录——其余在首次运行后自动创建。</p></div>
+      <div class="card"><h3>🔧 更新</h3><p><code>hermes update</code> 一键更新。重跑安装脚本也能覆盖旧版本，保留配置和会话。</p></div>
+      <div class="card"><h3>🗑️ 卸载</h3><p><code>hermes uninstall</code> 干净卸载。完全清除：卸载后手动删除 <code>~/.hermes/</code>。</p></div>
     </div>
 
-    <div class="takeaway">
-      <div class="label">📌 本节要点</div>
-      <ul>
-        <li>一条命令安装，不污染系统 Python</li>
-        <li><code>~/.hermes/</code> 是数据根目录，<code>~/.local/bin/hermes</code> 是入口</li>
-        <li><code>hermes update</code> 升级，<code>hermes uninstall</code> 卸载</li>
-      </ul>
-    </div>
+    <div class="takeaway"><div class="label">📌 本节要点</div><ul><li>一条命令安装，不污染系统 Python</li><li><code>~/.hermes/</code> 是数据根，<code>~/.local/bin/hermes</code> 是入口</li><li><code>hermes update</code> 升级，<code>hermes uninstall</code> 卸载</li></ul></div>
   </section>
 
   <hr>
@@ -181,60 +137,23 @@
   <!-- ═══════════════ 2. Setup ═══════════════ -->
   <section id="s2">
     <div class="section-title"><span class="num">2</span> 首次运行：hermes setup</div>
-    <div class="section-subtitle">装完之后还不能直接用——需要选模型、配密钥。Setup 向导帮你一步步搞定。</div>
+    <div class="section-subtitle">装完还不能直接用——需要选模型、配密钥。Setup 向导一步步搞定。</div>
 
     <div class="code-block">
-      <span class="c1"># 交互式配置向导</span><br>
-      hermes setup<br><br>
-      <span class="c1"># 跳到指定配置段</span><br>
-      hermes setup model        <span class="c1"># 只配模型</span><br>
-      hermes setup terminal     <span class="c1"># 只配终端后端</span><br>
-      hermes setup gateway      <span class="c1"># 只配平台接入</span>
+      <span class="c1"># 交互式配置向导</span><br>hermes setup<br><br>
+      <span class="c1"># 跳到指定段</span><br>hermes setup model &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 只配模型</span><br>hermes setup terminal &nbsp;&nbsp;&nbsp;<span class="c1"># 只配终端后端</span><br>hermes setup gateway &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 只配平台接入</span>
     </div>
-
-    <h3 class="sub-title">Setup 向导会问你什么？</h3>
 
     <table class="compare-table">
-      <thead><tr><th>步骤</th><th>问题</th><th>你做什么</th></tr></thead>
-      <tr>
-        <td><strong>1</strong></td>
-        <td>选 Provider（模型提供商）</td>
-        <td>从列表中选择——OpenRouter / Anthropic / OpenAI / DeepSeek / …</td>
-      </tr>
-      <tr>
-        <td><strong>2</strong></td>
-        <td>输入 API Key</td>
-        <td>粘贴对应 Provider 的 API Key，自动写入 <code>.env</code></td>
-      </tr>
-      <tr>
-        <td><strong>3</strong></td>
-        <td>选模型</td>
-        <td>从 Provider 的模型列表中选择默认模型</td>
-      </tr>
-      <tr>
-        <td><strong>4</strong></td>
-        <td>终端后端</td>
-        <td>local（本机）/ docker / ssh / modal——默认 local</td>
-      </tr>
-      <tr>
-        <td><strong>5</strong></td>
-        <td>平台接入（可选）</td>
-        <td>配置飞书 / Telegram / Discord 等，跳过就是纯终端模式</td>
-      </tr>
+      <thead><tr><th>步骤</th><th>问什么</th><th>你做什么</th></tr></thead>
+      <tr><td><strong>1</strong></td><td>选 Provider</td><td>从列表选——OpenRouter / Anthropic / OpenAI / DeepSeek / …</td></tr>
+      <tr><td><strong>2</strong></td><td>输入 API Key</td><td>粘贴 Key，自动写入 <code>.env</code></td></tr>
+      <tr><td><strong>3</strong></td><td>选模型</td><td>从 Provider 的模型列表中选默认模型</td></tr>
+      <tr><td><strong>4</strong></td><td>终端后端</td><td>local（本机）/ docker / ssh——默认 local</td></tr>
+      <tr><td><strong>5</strong></td><td>平台接入（可选）</td><td>配飞书/Telegram/Discord 等，跳过即纯终端模式</td></tr>
     </table>
 
-    <div class="callout tip">
-      <strong>🚀 最快上手路径：</strong>如果你有 OpenRouter 账号，运行 <code>hermes setup --portal</code>——一套 OAuth 登录搞定模型 + 搜索 + 生图 + 浏览器，零配置。
-    </div>
-
-    <div class="takeaway">
-      <div class="label">📌 本节要点</div>
-      <ul>
-        <li><code>hermes setup</code> 引导式配置，不需要手写 YAML</li>
-        <li>至少要配置 Model（API Key + 模型名），否则跑不起来</li>
-        <li><code>hermes setup --portal</code> 是一条龙的最快路径</li>
-      </ul>
-    </div>
+    <div class="callout tip"><strong>🚀 最快上手：</strong>有 OpenRouter 账号的话，<code>hermes setup --portal</code>——一套 OAuth 搞定模型+搜索+生图+浏览器，零配置。</div>
   </section>
 
   <hr>
@@ -244,98 +163,32 @@
     <div class="section-title"><span class="num">3</span> config.yaml 深度解析</div>
     <div class="section-subtitle">一行 YAML 一个行为——这里是你控制 Hermes 的总开关</div>
 
-    <p>Setup 向导会自动生成 <code>~/.hermes/config.yaml</code>。你可以用以下命令管理它：</p>
-
     <div class="code-block">
-      hermes config           <span class="c1"># 查看当前配置</span><br>
-      hermes config edit      <span class="c1"># 用 $EDITOR 打开编辑</span><br>
-      hermes config <span class="c4">set</span> <span class="c2">section.key</span> <span class="c3">value</span>  <span class="c1"># 命令行改单项</span><br>
-      hermes config path      <span class="c1"># 打印配置文件路径</span>
+      hermes config &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 查看当前配置</span><br>
+      hermes config edit &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 用编辑器打开</span><br>
+      hermes config <span class="c4">set</span> <span class="c2">section.key</span> <span class="c3">value</span> &nbsp;<span class="c1"># 命令行改单项</span>
     </div>
-
-    <h3 class="sub-title">🏗️ 完整配置结构</h3>
 
     <div class="config-tree">
-      <span class="key">model:</span>                          <span class="cmt">← 模型配置（必填）</span><br>
-      <span class="key">  default:</span> <span class="val">"deepseek/deepseek-chat"</span>  <span class="cmt">← 默认模型</span><br>
-      <span class="key">  provider:</span> <span class="val">"custom"</span>             <span class="cmt">← 使用的 Provider</span><br>
-      <span class="key">  base_url:</span> <span class="val">"..."</span>              <span class="cmt">← 自定义端点（仅 custom/openrouter）</span><br>
-      <span class="key">  api_key:</span> <span class="val">"..."</span>               <span class="cmt">← 直接写在 config 中（不推荐，放 .env）</span><br>
-      <span class="key">  context_length:</span> <span class="val">1000000</span>        <span class="cmt">← 模型上下文长度（用于压缩计算）</span><br>
-      <br>
-      <span class="key">agent:</span>                           <span class="cmt">← Agent 行为参数</span><br>
-      <span class="key">  max_turns:</span> <span class="val">90</span>                <span class="cmt">← 单次请求最大 LLM 调用次数</span><br>
-      <span class="key">  tool_use_enforcement:</span> <span class="val">true</span>  <span class="cmt">← 强制 LLM 使用工具（不让它只动嘴）</span><br>
-      <br>
-      <span class="key">terminal:</span>                         <span class="cmt">← 终端执行后端</span><br>
-      <span class="key">  backend:</span> <span class="val">"local"</span>             <span class="cmt">← local / docker / ssh / modal</span><br>
-      <span class="key">  cwd:</span> <span class="val">"~/"</span>                   <span class="cmt">← 默认工作目录</span><br>
-      <span class="key">  timeout:</span> <span class="val">180</span>               <span class="cmt">← 命令超时（秒）</span><br>
-      <br>
-      <span class="key">compression:</span>                       <span class="cmt">← 上下文压缩策略</span><br>
-      <span class="key">  enabled:</span> <span class="val">true</span><br>
-      <span class="key">  threshold:</span> <span class="val">0.50</span>             <span class="cmt">← 使用率超 50% 触发压缩</span><br>
-      <span class="key">  target_ratio:</span> <span class="val">0.20</span>          <span class="cmt">← 压缩到 20%</span><br>
-      <br>
-      <span class="key">memory:</span>                            <span class="cmt">← 持久记忆</span><br>
-      <span class="key">  memory_enabled:</span> <span class="val">true</span><br>
-      <span class="key">  user_profile_enabled:</span> <span class="val">true</span><br>
-      <span class="key">  provider:</span> <span class="val">"builtin"</span>         <span class="cmt">← builtin / honcho / mem0</span><br>
-      <br>
-      <span class="key">delegation:</span>                         <span class="cmt">← 子代理委托</span><br>
-      <span class="key">  model:</span> <span class="val">"..."</span>                <span class="cmt">← 子代理用的模型（不设则继承主模型）</span><br>
-      <span class="key">  max_iterations:</span> <span class="val">50</span><br>
-      <br>
-      <span class="key">approvals:</span>                          <span class="cmt">← 命令审批</span><br>
-      <span class="key">  mode:</span> <span class="val">"manual"</span>              <span class="cmt">← manual（始终确认）/ smart（LLM 判断）/ off（跳过）</span><br>
-      <br>
-      <span class="key">display:</span>                            <span class="cmt">← 显示偏好</span><br>
-      <span class="key">  skin:</span> <span class="val">"default"</span><br>
-      <span class="key">  show_reasoning:</span> <span class="val">false</span><br>
-      <span class="key">  show_cost:</span> <span class="val">false</span>
+      <span class="key">model:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← 模型配置（必填）</span><br>
+      <span class="key">&nbsp;&nbsp;default:</span> <span class="val">"deepseek/deepseek-chat"</span> &nbsp;<span class="cmt">← 默认模型</span><br>
+      <span class="key">&nbsp;&nbsp;provider:</span> <span class="val">"openrouter"</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← Provider</span><br>
+      <span class="key">&nbsp;&nbsp;context_length:</span> <span class="val">1000000</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← 上下文长度</span><br><br>
+      <span class="key">agent:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← Agent 行为</span><br>
+      <span class="key">&nbsp;&nbsp;max_turns:</span> <span class="val">90</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← 单次最大 LLM 调用次数</span><br><br>
+      <span class="key">terminal:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← 终端后端</span><br>
+      <span class="key">&nbsp;&nbsp;backend:</span> <span class="val">"local"</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← local / docker / ssh</span><br><br>
+      <span class="key">compression:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← 上下文压缩</span><br>
+      <span class="key">&nbsp;&nbsp;threshold:</span> <span class="val">0.50</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← 使用率超 50% 触发</span><br>
+      <span class="key">&nbsp;&nbsp;target_ratio:</span> <span class="val">0.20</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← 压到 20%</span><br><br>
+      <span class="key">memory:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← 持久记忆</span><br>
+      <span class="key">&nbsp;&nbsp;memory_enabled:</span> <span class="val">true</span><br>
+      <span class="key">&nbsp;&nbsp;user_profile_enabled:</span> <span class="val">true</span><br><br>
+      <span class="key">approvals:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← 命令审批</span><br>
+      <span class="key">&nbsp;&nbsp;mode:</span> <span class="val">"manual"</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt">← manual / smart / off</span>
     </div>
 
-    <div class="card-grid">
-      <div class="card">
-        <h3>⚙️ model</h3>
-        <p><strong>必填段。</strong>定义默认模型、Provider、自定义端点。Hermes 运行时从这里读取"用哪个 LLM"。</p>
-        <p style="margin-top:8px;font-size:13px;"><code>provider</code> 可以是 openrouter / anthropic / openai / deepseek / custom / …</p>
-      </div>
-      <div class="card">
-        <h3>🤖 agent</h3>
-        <p>控制 Agent 循环行为。<code>max_turns=90</code>——单次请求最多调 90 次 LLM。<code>tool_use_enforcement=true</code>——强制 LLM 用工具做事。</p>
-      </div>
-      <div class="card">
-        <h3>🖥️ terminal</h3>
-        <p>命令在哪执行。<code>local</code>（本机）最常用。<code>docker</code> 隔离环境。<code>ssh</code> 远程执行。<code>modal</code> 无服务器。</p>
-      </div>
-      <div class="card">
-        <h3>🗜️ compression</h3>
-        <p>上下文太长时的自动压缩策略。默认：用满 50% 触发，压到 20%。保护最近 20 条消息不被压缩。</p>
-      </div>
-      <div class="card">
-        <h3>🛡️ approvals</h3>
-        <p><code>manual</code>——危险命令弹确认。<code>smart</code>——LLM 辅助判断风险。<code>off</code>——跳过所有确认（= <code>--yolo</code>）。</p>
-      </div>
-      <div class="card">
-        <h3>🚀 delegation</h3>
-        <p>子代理配置。可单独指定模型（省钱用小模型跑简单任务），控制最大迭代次数。</p>
-      </div>
-    </div>
-
-    <div class="callout warn">
-      <strong>⚠ 改配置后需要重启：</strong>在 Gateway 模式下 <code>/restart</code>，终端模式退出重进。改 config.yaml 不会热加载——因为 System Prompt 需要重建。
-    </div>
-
-    <div class="takeaway">
-      <div class="label">📌 本节要点</div>
-      <ul>
-        <li><code>hermes config edit</code> 或 <code>hermes config set key val</code> 修改配置</li>
-        <li><code>model</code> 段必填——决定 Agent 用哪家 LLM</li>
-        <li>改配置后需要重启会话（<code>/reset</code> 或重进）</li>
-        <li>密钥放 <code>.env</code>，不要直接写 config.yaml</li>
-      </ul>
-    </div>
+    <div class="callout warn"><strong>⚠ 改配置后需要重启：</strong>Gateway <code>/restart</code>，终端退出重进。改 config.yaml 不会热加载——System Prompt 需要重建。</div>
   </section>
 
   <hr>
@@ -343,39 +196,16 @@
   <!-- ═══════════════ 4. .env ═══════════════ -->
   <section id="s4">
     <div class="section-title"><span class="num">4</span> .env 密钥管理</div>
-    <div class="section-subtitle">密钥和配置分离——这是安全底线</div>
-
     <div class="code-block">
-      <span class="c1"># 查看 .env 路径</span><br>
-      hermes config env-path<br><br>
-      <span class="c1"># 典型 .env 内容</span><br>
-      <span class="c4">OPENROUTER_API_KEY</span>=sk-or-v1-xxxxxxxxxxxxxxxx<br>
-      <span class="c4">ANTHROPIC_API_KEY</span>=sk-ant-xxxxxxxxxxxxxxxx<br>
-      <span class="c4">DEEPSEEK_API_KEY</span>=sk-xxxxxxxxxxxxxxxx<br>
-      <span class="c4">GEMINI_API_KEY</span>=AIzaxxxxxxxxxxxxxxxx<br>
-      <span class="c4">HERMES_HOME</span>=/opt/data            <span class="c1"># 可选：自定义数据目录</span>
+      <span class="c1"># 典型 .env</span><br>
+      <span class="c4">OPENROUTER_API_KEY</span>=sk-or-...xxxx<br>
+      <span class="c4">ANTHROPIC_API_KEY</span>=sk-ant-...xxxx<br>
+      <span class="c4">DEEPSEEK_API_KEY</span>=sk-xxx...xxxx<br>
+      <span class="c4">HERMES_HOME</span>=/opt/data &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 可选：自定义数据目录</span>
     </div>
-
-    <p>每个 Provider 有对应的环境变量名。完整列表见下一节 Provider 表格。</p>
-
     <div class="card-grid">
-      <div class="card">
-        <h3>🔐 为什么分离？</h3>
-        <p><code>config.yaml</code> 可以分享、可以入 git（不含密钥）。<code>.env</code> <strong>绝对不能入 git</strong>——应该在 <code>.gitignore</code> 中排除。</p>
-      </div>
-      <div class="card">
-        <h3>🔄 热加载</h3>
-        <p>修改 <code>.env</code> 后运行 <code>/reload</code>（终端模式）或在 Gateway 模式 <code>/restart</code>。不需要完全重启。</p>
-      </div>
-    </div>
-
-    <div class="takeaway">
-      <div class="label">📌 本节要点</div>
-      <ul>
-        <li>密钥永远放 <code>.env</code>，不要写 config.yaml</li>
-        <li><code>.env</code> 不入 git——把它加到 <code>.gitignore</code></li>
-        <li>每个 Provider 有自己的环境变量名，见 Provider 表格</li>
-      </ul>
+      <div class="card"><h3>🔐 为什么分离？</h3><p><code>config.yaml</code> 可分享可入 git。 <code>.env</code> <strong>绝对不能入 git</strong>——加到 <code>.gitignore</code>。密钥和配置分离是安全底线。</p></div>
+      <div class="card"><h3>⚡ 优先级</h3><p><code>.env</code> 环境变量优先级 <strong>高于</strong> <code>config.yaml</code> 中的 <code>api_key</code>。同名时 .env 覆盖。</p></div>
     </div>
   </section>
 
@@ -386,57 +216,31 @@
     <div class="section-title"><span class="num">5</span> Provider 体系</div>
     <div class="section-subtitle">20+ 厂商任选——不锁死任何一家</div>
 
-    <p>Hermes 最大的自由度之一：<strong>Provider 和模型可以随时切换</strong>，不需要改代码，不需要重启 Agent Loop（改完 <code>/reset</code> 即可）。</p>
-
-    <h3 class="sub-title">🌐 全 Provider 一览</h3>
-
     <table class="compare-table">
-      <thead><tr><th>Provider</th><th>认证方式</th><th>环境变量</th><th>说明</th></tr></thead>
-      <tr><td><strong>OpenRouter</strong></td><td>API Key</td><td><code>OPENROUTER_API_KEY</code></td><td>聚合平台，200+ 模型一站通</td></tr>
+      <thead><tr><th>Provider</th><th>认证</th><th>环境变量</th><th>说明</th></tr></thead>
+      <tr><td><strong>OpenRouter</strong></td><td>API Key</td><td><code>OPENROUTER_API_KEY</code></td><td>聚合平台，200+ 模型一站通 ⭐推荐</td></tr>
       <tr><td><strong>Anthropic</strong></td><td>API Key</td><td><code>ANTHROPIC_API_KEY</code></td><td>Claude 系列</td></tr>
-      <tr><td><strong>OpenAI</strong></td><td>API Key</td><td><code>OPENAI_API_KEY</code></td><td>GPT-4o / o1 / o3 系列</td></tr>
+      <tr><td><strong>OpenAI</strong></td><td>API Key</td><td><code>OPENAI_API_KEY</code></td><td>GPT-4o / o1 系列</td></tr>
       <tr><td><strong>DeepSeek</strong></td><td>API Key</td><td><code>DEEPSEEK_API_KEY</code></td><td>高性价比国产模型</td></tr>
-      <tr><td><strong>Google Gemini</strong></td><td>API Key</td><td><code>GEMINI_API_KEY</code></td><td>Gemini 2.5 系列</td></tr>
+      <tr><td><strong>Google Gemini</strong></td><td>API Key</td><td><code>GEMINI_API_KEY</code></td><td>Gemini 系列</td></tr>
       <tr><td><strong>xAI / Grok</strong></td><td>API Key</td><td><code>XAI_API_KEY</code></td><td>Grok 系列</td></tr>
-      <tr><td><strong>GitHub Copilot</strong></td><td>OAuth Token</td><td><code>COPILOT_GITHUB_TOKEN</code></td><td>通过 Copilot 订阅使用</td></tr>
-      <tr><td><strong>Nous Portal</strong></td><td>OAuth</td><td><code>hermes auth</code></td><td>Nous 官方，模型+工具一条龙</td></tr>
-      <tr><td><strong>OpenAI Codex</strong></td><td>OAuth</td><td><code>hermes auth</code></td><td>通过 Codex CLI 订阅使用</td></tr>
-      <tr><td><strong>HuggingFace</strong></td><td>Token</td><td><code>HF_TOKEN</code></td><td>HF 推理端点</td></tr>
       <tr><td><strong>Kimi / Moonshot</strong></td><td>API Key</td><td><code>KIMI_API_KEY</code></td><td>月之暗面</td></tr>
       <tr><td><strong>Alibaba DashScope</strong></td><td>API Key</td><td><code>DASHSCOPE_API_KEY</code></td><td>阿里通义系列</td></tr>
-      <tr><td><strong>MiniMax</strong></td><td>API Key</td><td><code>MINIMAX_API_KEY</code></td><td>MiniMax 国际版</td></tr>
-      <tr><td><strong>MiniMax CN</strong></td><td>API Key</td><td><code>MINIMAX_CN_API_KEY</code></td><td>MiniMax 国内版</td></tr>
-      <tr><td><strong>Z.AI / GLM</strong></td><td>API Key</td><td><code>GLM_API_KEY</code></td><td>智谱 GLM 系列</td></tr>
-      <tr><td><strong>Xiaomi MiMo</strong></td><td>API Key</td><td><code>XIAOMI_API_KEY</code></td><td>小米 MiMo</td></tr>
-      <tr><td><strong>Custom</strong></td><td>自定义</td><td><code>model.api_key</code></td><td>任意 OpenAI 兼容端点</td></tr>
+      <tr><td><strong>MiniMax</strong></td><td>API Key</td><td><code>MINIMAX_API_KEY</code></td><td>MiniMax</td></tr>
+      <tr><td><strong>Z.AI / GLM</strong></td><td>API Key</td><td><code>GLM_API_KEY</code></td><td>智谱 GLM</td></tr>
+      <tr><td><strong>GitHub Copilot</strong></td><td>OAuth</td><td><code>COPILOT_GITHUB_TOKEN</code></td><td>Copilot 订阅</td></tr>
+      <tr><td><strong>Nous Portal</strong></td><td>OAuth</td><td><code>hermes auth</code></td><td>Nous 官方一条龙</td></tr>
+      <tr><td><strong>Custom</strong></td><td>自定义</td><td><code>model.base_url</code></td><td>任意 OpenAI 兼容端点</td></tr>
     </table>
 
-    <div class="callout tip">
-      <strong>💡 推荐初学者用 OpenRouter：</strong>一个 API Key 通吃 200+ 模型，不用每家注册一遍。注册 openrouter.ai → 创建 Key → <code>hermes setup</code> 选 OpenRouter → 搞定。
-    </div>
-
-    <h3 class="sub-title">🔧 Custom Provider：接入任意 OpenAI 兼容端点</h3>
-    <p>如果你想用 Ollama 本地模型、自己部署的 vLLM、或者公司内部的 LLM 网关：</p>
-
+    <h3 class="sub-title">🔧 Custom Provider（本地模型等）</h3>
     <div class="code-block">
       <span class="c1"># config.yaml</span><br>
       <span class="key">model:</span><br>
-      <span class="key">  default:</span> <span class="val">"llama-3.1-70b"</span><br>
-      <span class="key">  provider:</span> <span class="val">"custom"</span><br>
-      <span class="key">  base_url:</span> <span class="val">"http://localhost:11434/v1"</span>    <span class="c1">← Ollama / vLLM 地址</span><br>
-      <span class="key">  api_key:</span> <span class="val">"ollama"</span>                    <span class="c1">← Ollama 不需要真 key，随便填</span>
-    </div>
-
-    <p>只要端点兼容 OpenAI 的 <code>/v1/chat/completions</code> 格式，就能用。</p>
-
-    <div class="takeaway">
-      <div class="label">📌 本节要点</div>
-      <ul>
-        <li>20+ Provider，API Key / OAuth 两种认证方式</li>
-        <li>OpenRouter 是初学者的最佳起点</li>
-        <li>Custom Provider 可以接任何 OpenAI 兼容端点</li>
-        <li>Provider 可以随时切换，<code>/reset</code> 生效</li>
-      </ul>
+      <span class="key">&nbsp;&nbsp;default:</span> <span class="val">"llama-3.1-70b"</span><br>
+      <span class="key">&nbsp;&nbsp;provider:</span> <span class="val">"custom"</span><br>
+      <span class="key">&nbsp;&nbsp;base_url:</span> <span class="val">"http://localhost:11434/v1"</span> &nbsp;<span class="c1">← Ollama / vLLM 地址</span><br>
+      <span class="key">&nbsp;&nbsp;api_key:</span> <span class="val">"ollama"</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1">← Ollama 随便填</span>
     </div>
   </section>
 
@@ -445,62 +249,19 @@
   <!-- ═══════════════ 6. Model Selection ═══════════════ -->
   <section id="s6">
     <div class="section-title"><span class="num">6</span> 模型选择与切换</div>
-    <div class="section-subtitle">挑一个适合你任务和预算的模型</div>
-
-    <h3 class="sub-title">交互式选择</h3>
-    <div class="code-block">hermes model    <span class="c1"># 打开交互式模型选择器</span></div>
-
-    <h3 class="sub-title">命令行切换</h3>
     <div class="code-block">
-      <span class="c1"># 临时切换（仅本次会话）</span><br>
-      hermes chat -m <span class="val">"anthropic/claude-sonnet-4"</span><br><br>
-      <span class="c1"># 永久切换（修改 config.yaml）</span><br>
-      hermes config <span class="c4">set</span> model.default <span class="val">"anthropic/claude-sonnet-4"</span><br><br>
-      <span class="c1"># 会话内切换</span><br>
-      /model anthropic/claude-sonnet-4    <span class="c1">← 斜杠命令</span>
+      hermes model &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 交互式选择</span><br>
+      hermes chat -m <span class="val">"deepseek/deepseek-chat"</span> &nbsp;<span class="c1"># 临时切换</span><br>
+      hermes config <span class="c4">set</span> model.default <span class="val">"..."</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 永久切换</span>
     </div>
-
-    <h3 class="sub-title">📊 模型选择指南</h3>
 
     <div class="card-grid">
-      <div class="card">
-        <h3>🏆 最强综合</h3>
-        <p><code>anthropic/claude-sonnet-4</code>（通过 OpenRouter）<br>代码 + 推理 + 工具调用均为顶级。推荐有预算的首选。</p>
-      </div>
-      <div class="card">
-        <h3>💰 高性价比</h3>
-        <p><code>deepseek/deepseek-chat</code>（DeepSeek V3）<br>性能接近顶级，价格仅为 1/10。日常开发首选。</p>
-      </div>
-      <div class="card">
-        <h3>🇨🇳 国内友好</h3>
-        <p><code>deepseek/deepseek-chat</code> / <code>kimi/moonshot-v1</code> / <code>dashscope/qwen-max</code><br>国内网络直连，无需代理。</p>
-      </div>
-      <div class="card">
-        <h3>🔬 推理最强</h3>
-        <p><code>anthropic/claude-opus-4</code> / <code>openai/o3</code><br>复杂多步推理任务。贵，但出错率最低。</p>
-      </div>
-      <div class="card">
-        <h3>🏠 本地运行</h3>
-        <p>Ollama + <code>custom</code> Provider<br>完全离线，数据不出本机。需要足够显存（建议 70B+）。</p>
-      </div>
-      <div class="card">
-        <h3>⚡ 快速便宜</h3>
-        <p><code>google/gemini-2.5-flash</code> / <code>openai/gpt-4o-mini</code><br>简单任务、大规模批处理用。速度快、成本极低。</p>
-      </div>
-    </div>
-
-    <div class="callout think">
-      <strong>🤔 怎么选？一个实用原则：</strong>先用便宜模型跑通流程，确认需求没问题后，切换到强模型做最终执行。这就是"先用 DeepSeek 试，再用 Claude 收尾"的策略。
-    </div>
-
-    <div class="takeaway">
-      <div class="label">📌 本节要点</div>
-      <ul>
-        <li><code>hermes model</code> 交互式切换，<code>hermes config set model.default ...</code> 永久切换</li>
-        <li>DeepSeek V3 是性价比之王，Claude Sonnet 4 是能力天花板</li>
-        <li>可以临时切换模型（<code>-m</code> 参数），不修改 config</li>
-        <li>子代理可以配不同的模型（省钱策略）</li>
-      </ul>
+      <div class="card"><h3>🏆 最强综合</h3><p><code>anthropic/claude-sonnet-4</code>（OpenRouter）<br>代码+推理+工具调用顶级。</p></div>
+      <div class="card"><h3>💰 高性价比</h3><p><code>deepseek/deepseek-chat</code>（DeepSeek V3）<br>性能接近顶级，价格 ~1/10。</p></div>
+      <div class="card"><h3>🇨🇳 国内友好</h3><p>DeepSeek / Kimi / DashScope<br>国内网络直连，无需代理。</p></div>
+      <div class="card"><h3>🏠 本地运行</h3><p>Ollama + Custom Provider<br>完全离线。建议 70B+。</p></div>
+      <div class="card"><h3>⚡ 快速便宜</h3><p><code>gemini-2.5-flash</code> / <code>gpt-4o-mini</code><br>简单任务、批量处理用。</p></div>
+      <div class="card"><h3>🔬 推理最强</h3><p><code>claude-opus-4</code> / <code>o3</code><br>复杂多步推理。贵但出错率最低。</p></div>
     </div>
   </section>
 
@@ -511,62 +272,21 @@
     <div class="section-title"><span class="num">7</span> 凭证池（Credential Pool）</div>
     <div class="section-subtitle">一个 Provider 多个 Key——自动轮转，告别限流</div>
 
-    <p>大规模使用时，单个 API Key 可能遇到速率限制（Rate Limit）。Hermes 支持<strong>凭证池</strong>——给同一个 Provider 配置多个 Key，自动轮转使用。</p>
+    <div class="code-block">hermes auth add openrouter &nbsp;&nbsp;<span class="c1"># 添加 Key 到凭证池</span><br>hermes auth list &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 查看所有凭证</span><br>hermes auth reset openrouter &nbsp;<span class="c1"># 恢复耗尽状态的 Key</span></div>
 
-    <div class="code-block">
-      <span class="c1"># 交互式添加凭证</span><br>
-      hermes auth add openrouter      <span class="c1">← 会提示你输入 API Key</span><br><br>
-      <span class="c1"># 查看凭证池</span><br>
-      hermes auth list<br><br>
-      <span class="c1"># 移除某个凭证</span><br>
-      hermes auth remove openrouter 0    <span class="c1">← 按索引移除</span><br><br>
-      <span class="c1"># 重置耗尽状态（Key 恢复后）</span><br>
-      hermes auth reset openrouter
-    </div>
-
-    <div class="flow-container">
-      <svg viewBox="0 0 750 220" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <marker id="ca" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#58a6ff"/>
-          </marker>
-        </defs>
-        <rect x="0" y="0" width="750" height="220" rx="12" fill="#161b22" stroke="#30363d" stroke-width="1"/>
-        <text x="375" y="30" text-anchor="middle" fill="#8b949e" font-size="13" font-weight="600">凭证池轮转机制</text>
-
-        <!-- Keys -->
-        <rect x="30" y="60" width="180" height="50" rx="8" fill="#0d2a1a" stroke="#3fb950" stroke-width="1"/>
-        <text x="120" y="82" text-anchor="middle" fill="#3fb950" font-size="13" font-weight="600">Key 0 · 活跃</text>
-        <text x="120" y="100" text-anchor="middle" fill="#8b949e" font-size="10">sk-or-v1-aaaa...</text>
-
-        <rect x="240" y="60" width="180" height="50" rx="8" fill="#0d2a1a" stroke="#3fb950" stroke-width="1"/>
-        <text x="330" y="82" text-anchor="middle" fill="#3fb950" font-size="13" font-weight="600">Key 1 · 备用</text>
-        <text x="330" y="100" text-anchor="middle" fill="#8b949e" font-size="10">sk-or-v1-bbbb...</text>
-
-        <rect x="450" y="60" width="180" height="50" rx="8" fill="#2a1a1a" stroke="#f85149" stroke-width="1"/>
-        <text x="540" y="82" text-anchor="middle" fill="#f85149" font-size="13" font-weight="600">Key 2 · 已耗尽</text>
-        <text x="540" y="100" text-anchor="middle" fill="#8b949e" font-size="10">rate limited</text>
-
-        <!-- Arrows to Pool -->
-        <line x1="120" y1="115" x2="120" y2="145" stroke="#58a6ff" stroke-width="1.5"/>
-        <line x1="330" y1="115" x2="330" y2="145" stroke="#58a6ff" stroke-width="1.5"/>
-        <line x1="540" y1="115" x2="540" y2="145" stroke="#f85149" stroke-width="1.5" stroke-dasharray="4,2"/>
-
-        <!-- Pool -->
-        <rect x="200" y="150" width="350" height="44" rx="22" fill="#1a2a3e" stroke="#58a6ff" stroke-width="1.5"/>
-        <text x="375" y="178" text-anchor="middle" fill="#58a6ff" font-size="14" font-weight="700">🔄 轮转选择器 → 返回活跃的 Key</text>
-      </svg>
+    <div class="mermaid-wrap">
+      <div class="mermaid">
+flowchart TD
+    A["Key 0 · 活跃<br/>sk-or-xxxx..."] --> D["🔄 轮转选择器<br/>返回活跃的 Key"]
+    B["Key 1 · 备用<br/>sk-or-yyyy..."] --> D
+    C["Key 2 · 已耗尽<br/>rate limited"] -.->|"跳过"| D
+    D --> E["✅ 始终使用可用 Key"]
+      </div>
     </div>
 
     <div class="card-grid">
-      <div class="card">
-        <h3>🔁 轮转策略</h3>
-        <p>自动跳过已耗尽的 Key。所有 Key 都耗尽时返回错误。你可以通过 <code>hermes auth reset</code> 手动恢复。</p>
-      </div>
-      <div class="card">
-        <h3>📊 适用场景</h3>
-        <p>① 团队共享 Hermes 实例，每人用各自的 Key<br>② 多账号规避 Rate Limit<br>③ 主备切换——一个挂了自动用另一个</p>
-      </div>
+      <div class="card"><h3>🔁 轮转策略</h3><p>自动跳过已耗尽 Key。全耗尽时返回错误。<code>hermes auth reset</code> 手动恢复。</p></div>
+      <div class="card"><h3>📊 适用场景</h3><p>① 团队共享实例各用各 Key<br>② 多账号规避 Rate Limit<br>③ 主备切换</p></div>
     </div>
   </section>
 
@@ -575,59 +295,18 @@
   <!-- ═══════════════ 8. Verification ═══════════════ -->
   <section id="s8">
     <div class="section-title"><span class="num">8</span> 验证与排障</div>
-    <div class="section-subtitle">确认一切正常，出问题了知道看哪里</div>
-
-    <h3 class="sub-title">✅ 验证安装</h3>
-    <div class="code-block">
-      <span class="c1"># 健康检查——一跑就知道哪里有问题</span><br>
-      hermes doctor<br><br>
-      <span class="c1"># 自动修复已知问题</span><br>
-      hermes doctor --fix<br><br>
-      <span class="c1"># 配置检查</span><br>
-      hermes config check            <span class="c1">← 检查是否有缺失/过期配置项</span><br><br>
-      <span class="c1"># 迁移新配置项</span><br>
-      hermes config migrate          <span class="c1">← 升级后自动补全新配置项</span>
-    </div>
-
-    <h3 class="sub-title">🔍 常见问题速查</h3>
+    <div class="code-block">hermes doctor &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 健康检查</span><br>hermes doctor --fix &nbsp;&nbsp;<span class="c1"># 自动修复</span><br>hermes config check &nbsp;&nbsp;<span class="c1"># 配置完整性检查</span></div>
 
     <table class="compare-table">
       <thead><tr><th>现象</th><th>可能原因</th><th>解决</th></tr></thead>
-      <tr>
-        <td><code>hermes: command not found</code></td>
-        <td>PATH 没配</td>
-        <td><code>export PATH="$HOME/.local/bin:$PATH"</code> 加到 <code>~/.bashrc</code></td>
-      </tr>
-      <tr>
-        <td>LLM 返回 401 / 403</td>
-        <td>API Key 错误或过期</td>
-        <td>检查 <code>.env</code> 中对应环境变量，或 <code>hermes auth</code> 重新认证</td>
-      </tr>
-      <tr>
-        <td>LLM 返回 429</td>
-        <td>Rate Limit</td>
-        <td>等几分钟，或加第二个 Key 到凭证池</td>
-      </tr>
-      <tr>
-        <td>工具不出现</td>
-        <td>Toolset 未启用</td>
-        <td><code>hermes tools</code> → 启用对应工具 → <code>/reset</code></td>
-      </tr>
-      <tr>
-        <td>修改配置不生效</td>
-        <td>没重启会话</td>
-        <td>Gateway: <code>/restart</code>；终端：退出重进</td>
-      </tr>
-      <tr>
-        <td>Gateway 连不上</td>
-        <td>服务未启动或崩溃</td>
-        <td><code>hermes gateway status</code> → <code>hermes gateway restart</code></td>
-      </tr>
+      <tr><td><code>hermes: command not found</code></td><td>PATH 没配</td><td><code>export PATH="$HOME/.local/bin:$PATH"</code></td></tr>
+      <tr><td>LLM 返回 401/403</td><td>API Key 错误或过期</td><td>检查 <code>.env</code>，<code>hermes auth</code> 重新认证</td></tr>
+      <tr><td>LLM 返回 429</td><td>Rate Limit</td><td>等几分钟，或加第二个 Key 到凭证池</td></tr>
+      <tr><td>工具不出现</td><td>Toolset 未启用</td><td><code>hermes tools</code> 启用 → <code>/reset</code></td></tr>
+      <tr><td>改配置不生效</td><td>没重启会话</td><td>Gateway: <code>/restart</code>；终端: 退出重进</td></tr>
     </table>
 
-    <div class="callout tip">
-      <strong>💡 万能第一步：</strong>遇到任何问题先跑 <code>hermes doctor</code>。它检查：Python 版本、config 完整性、.env 配置、Provider 连通性、工具依赖。大部分问题在这一步就能定位。
-    </div>
+    <div class="callout tip"><strong>💡 万能第一步：</strong>遇事先跑 <code>hermes doctor</code>。检查 Python 版本、config 完整性、.env 配置、Provider 连通性。</div>
   </section>
 
   <hr>
@@ -635,52 +314,18 @@
   <!-- ═══════════════ 9. FAQ ═══════════════ -->
   <section id="s9">
     <div class="section-title"><span class="num">9</span> 常见疑问</div>
-
-    <div class="faq-item">
-      <div class="faq-q">Q: 我可以同时配多个 Provider 吗？不同任务用不同模型？</div>
-      <div class="faq-a">
-        可以。config.yaml 里 <code>model.default</code> 是默认模型。你可以临时用 <code>-m</code> 参数指定其他模型，也可以给子代理（delegation）单独配置模型。同一个会话内 <code>/model xxx</code> 切换（需要 <code>/reset</code>）。
-      </div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">Q: 不用 OpenRouter，怎么直接接 Anthropic API？</div>
-      <div class="faq-a">
-        <code>hermes config set model.provider anthropic</code>，然后在 <code>.env</code> 中设 <code>ANTHROPIC_API_KEY</code>。模型名直接用 <code>claude-sonnet-4-20250514</code>（不带 <code>anthropic/</code> 前缀）。
-      </div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">Q: config.yaml 和 .env 到底谁优先？</div>
-      <div class="faq-a">
-        <code>.env</code> 中的环境变量优先级 <strong>高于</strong> <code>config.yaml</code> 中的 <code>api_key</code> 字段。所以如果你在 config.yaml 里写了 key，又在 .env 里写了同名环境变量，.env 的值会覆盖。
-      </div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">Q: 怎么知道当前用的是哪个模型？</div>
-      <div class="faq-a">
-        终端：<code>/model</code> 不带参数显示当前模型名。<br>
-        或者 <code>hermes config | grep default</code> 查看配置。
-      </div>
-    </div>
-
-    <div class="faq-item">
-      <div class="faq-q">Q: 能用 GitHub Copilot 的订阅来跑 Hermes 吗？</div>
-      <div class="faq-a">
-        可以。<code>hermes model</code> → 选 GitHub Copilot → 按提示完成 OAuth 设备码认证。注意：Copilot 的 token 有速率限制，不适合高频大量调用。
-      </div>
-    </div>
+    <div class="faq-item"><div class="faq-q">Q: 能同时配多个 Provider 吗？</div><div class="faq-a">可以。<code>model.default</code> 是默认，<code>-m</code> 参数临时切换，子代理可单独配模型。</div></div>
+    <div class="faq-item"><div class="faq-q">Q: config.yaml 和 .env 谁优先？</div><div class="faq-a"><code>.env</code> 环境变量优先级高于 config.yaml 中的 <code>api_key</code>。</div></div>
+    <div class="faq-item"><div class="faq-q">Q: 怎么不用 OpenRouter 直连 Anthropic？</div><div class="faq-a"><code>hermes config set model.provider anthropic</code>，<code>.env</code> 设 <code>ANTHROPIC_API_KEY</code>。模型名不带 <code>anthropic/</code> 前缀。</div></div>
+    <div class="faq-item"><div class="faq-q">Q: 能用 GitHub Copilot 订阅跑 Hermes？</div><div class="faq-a">可以。<code>hermes model</code> → 选 GitHub Copilot → OAuth 认证。注意有速率限制，不适合高频大量调用。</div></div>
   </section>
 
   <hr>
-
   <div class="page-nav">
     <a href="../01-core-concepts/">← 模块 1：核心概念与架构</a>
     <a href="#">模块 3：系统提示词与人格 (Persona) →</a>
   </div>
 
 </div>
-
 </body>
 </html>
