@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模块 6：记忆系统 (Memory) — Hermes Agent 完全学习手册</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--text3:#6e7681;--accent:#58a6ff;--accent2:#79c0ff;--green:#3fb950;--orange:#d2991d;--red:#f85149;--purple:#a371f7;--teal:#39d2c0;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;--mono:'JetBrains Mono','Cascadia Code','Consolas','SF Mono',monospace;--radius:8px;--radius-lg:12px;--mm-bg:#161b22;--mm-node-bg:#21262d;--mm-node-border:#58a6ff;--mm-line:#8b949e;--mm-text:#e6edf3}
+  [data-theme="light"]{--bg:#fff;--surface:#f6f8fa;--surface2:#eaeef2;--border:#d0d7de;--text:#1f2328;--text2:#656d76;--text3:#8c959f;--accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--orange:#9a6700;--red:#cf222e;--purple:#8250df;--teal:#1b7c83;--mm-bg:#fff;--mm-node-bg:#f6f8fa;--mm-node-border:#0969da;--mm-line:#656d76;--mm-text:#1f2328}
+  *{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.8;font-size:15px;transition:background .3s,color .3s}.container{max-width:920px;margin:0 auto;padding:50px 24px 80px}.theme-toggle{position:fixed;top:16px;right:16px;z-index:100;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}.theme-toggle:hover{border-color:var(--accent)}.hero{text-align:center;padding:60px 0 32px;border-bottom:1px solid var(--border);margin-bottom:40px}.hero .badge{display:inline-block;background:var(--surface2);color:var(--accent);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:16px}.hero h1{font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1.2;background:linear-gradient(135deg,var(--accent) 0%,var(--purple) 45%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero .subtitle{color:var(--text2);font-size:17px;max-width:620px;margin:0 auto 8px}.hero .meta{color:var(--text3);font-size:13px}.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 28px;margin:24px 0}.toc h3{font-size:15px;margin-bottom:12px;color:var(--accent)}.toc ol{padding-left:20px}.toc li{margin:4px 0;color:var(--text2);font-size:14px}.toc li a{color:var(--accent2);text-decoration:none}.toc li a:hover{text-decoration:underline}section{margin:48px 0}.section-title{font-size:26px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}.section-title .num{background:var(--accent);color:#fff;min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}.section-subtitle{color:var(--text2);font-size:14px;margin-bottom:24px;margin-top:4px}.sub-title{font-size:19px;font-weight:700;margin:28px 0 12px;color:var(--accent2)}.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:16px 0}.card h3{font-size:16px;margin-bottom:8px}.card p,.card li{color:var(--text2);font-size:14px}.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:16px 0}.compare-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}.compare-table thead th{background:var(--surface2);text-align:left;padding:10px 16px;font-weight:600;border-bottom:1px solid var(--border)}.compare-table td{padding:10px 16px;border-bottom:1px solid rgba(128,128,128,0.15);vertical-align:top}.compare-table tr:last-child td{border-bottom:none}.compare-table .c1{color:var(--green);font-weight:600}.compare-table .c2{color:var(--red)}.code-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:auto;color:var(--text)}.code-block .c1{color:var(--text3)}.code-block .c2{color:var(--accent2)}.code-block .c3{color:var(--green)}.code-block .c4{color:var(--purple)}.mermaid-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:16px 0;overflow-x:auto}.mermaid-wrap svg{width:100%!important;max-width:100%!important;height:auto!important}.callout{border-left:3px solid var(--accent);padding:12px 16px;margin:16px 0;background:color-mix(in srgb,var(--accent) 6%,transparent);border-radius:0 var(--radius) var(--radius) 0;font-size:14px}.callout.warn{border-color:var(--orange);background:color-mix(in srgb,var(--orange) 6%,transparent)}.callout.tip{border-color:var(--green);background:color-mix(in srgb,var(--green) 6%,transparent)}.callout.think{border-color:var(--purple);background:color-mix(in srgb,var(--purple) 6%,transparent)}.takeaway{background:color-mix(in srgb,var(--accent) 6%,transparent);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin:20px 0}.takeaway .label{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}.takeaway ul{padding-left:18px}.takeaway li{font-size:14px;margin:3px 0}.faq-item{margin:12px 0}.faq-q{font-weight:700;color:var(--accent2);font-size:15px}.faq-a{color:var(--text2);font-size:14px;padding:6px 0 12px 16px}hr{border:none;border-top:1px solid var(--border);margin:40px 0}p{margin:10px 0}code{background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:13px;color:var(--text)}strong{color:var(--text)}.page-nav{display:flex;justify-content:space-between;margin-top:48px;padding-top:20px;border-top:1px solid var(--border)}.page-nav a{color:var(--accent);text-decoration:none;font-weight:600}.page-nav a:hover{text-decoration:underline}@media(max-width:768px){.container{padding:24px 16px 48px}.hero h1{font-size:30px}.section-title{font-size:22px}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<script>
+const mc={startOnLoad:true,securityLevel:'loose',theme:'base',themeVariables:{background:'var(--mm-bg)',primaryColor:'var(--mm-node-bg)',primaryBorderColor:'var(--mm-node-border)',primaryTextColor:'var(--mm-text)',lineColor:'var(--mm-line)',nodeBorder:'var(--mm-node-border)',clusterBkg:'var(--mm-node-bg)',clusterBorder:'var(--mm-node-border)',titleColor:'var(--mm-text)',edgeLabelBackground:'var(--mm-bg)',fontSize:'16px'},flowchart:{useMaxWidth:true,htmlLabels:true,curve:'basis',padding:24,nodeSpacing:55,rankSpacing:65}};
+function im(){var s=getComputedStyle(document.documentElement);mc.themeVariables.background=s.getPropertyValue('--mm-bg').trim();mc.themeVariables.primaryColor=s.getPropertyValue('--mm-node-bg').trim();mc.themeVariables.primaryBorderColor=s.getPropertyValue('--mm-node-border').trim();mc.themeVariables.primaryTextColor=s.getPropertyValue('--mm-text').trim();mc.themeVariables.lineColor=s.getPropertyValue('--mm-line').trim();mc.themeVariables.clusterBkg=s.getPropertyValue('--mm-node-bg').trim();mc.themeVariables.edgeLabelBackground=s.getPropertyValue('--mm-bg').trim();mermaid.initialize(mc)}
+function toggleTheme(){var h=document.documentElement;var n=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('ht',n);im();var cs=document.querySelectorAll('.mermaid');cs.forEach(function(c){c.removeAttribute('data-processed');if(c.firstChild)c.innerHTML=c.firstChild.textContent});mermaid.run({querySelector:'.mermaid'})}
+(function(){var s=localStorage.getItem('ht');if(s)document.documentElement.setAttribute('data-theme',s);im()})()
+</script>
+<div class="container">
+
+<div class="hero"><div class="badge">模块 6 / 10</div><h1>记忆系统 (Memory)</h1><p class="subtitle">跨会话持久化——Agent 不会"失忆"，你也不用重复说同样的话。</p><p class="meta">预计阅读时间：10 分钟</p></div>
+<div class="toc"><h3>📑 本模块目录</h3><ol>
+<li><a href="#s1">两类 Memory</a></li><li><a href="#s2">Memory 的运作方式</a></li><li><a href="#s3">操作命令</a></li><li><a href="#s4">Memory Backend</a></li><li><a href="#s5">最佳实践</a></li>
+</ol></div>
+
+<section id="s1"><div class="section-title"><span class="num">1</span> 两类 Memory</div>
+<table class="compare-table">
+<thead><tr><th>维度</th><th>User Profile</th><th>Agent Memory</th></tr></thead>
+<tr><td><strong>存什么</strong></td><td>用户是谁——姓名、角色、偏好、环境</td><td>Agent 的笔记——项目路径、工具版本、踩过的坑</td></tr>
+<tr><td><strong>谁写</strong></td><td>Agent 观察到用户信息后自动保存</td><td>Agent 主动保存环境事实、约定、经验</td></tr>
+<tr><td><strong>目标</strong></td><td>减少用户重复自我介绍</td><td>积累跨会话知识，越用越聪明</td></tr>
+<tr><td><strong>示例</strong></td><td>"用户偏好直接执行，不要确认"</td><td>"JDK 21 路径在 /opt/jdk-21"</td></tr>
+</table>
+<div class="callout tip"><strong>💡 好的 Memory：</strong>跨会话仍然有效的事实。不要存会话进度、TODO、commit SHA 等一周后就过期的信息。原则：<strong>如果 7 天后还需要这个信息，就存。</strong></div>
+</section>
+
+<hr>
+<section id="s2"><div class="section-title"><span class="num">2</span> Memory 的运作方式</div>
+<p>Memory 在每个 turn 的 System Prompt 构建时<strong>自动注入</strong>（Layer 3 和 Layer 4）。Agent 看到 Memory 就像看到"背景知识"——不需要主动查询。</p>
+<div class="mermaid-wrap"><div class="mermaid">
+flowchart LR
+    A["Agent 会话"] --> B["Memory 自动注入<br/>System Prompt Layer 3+4"]
+    B --> C["Agent 基于 Memory 工作"]
+    C --> D{"学到新事实？"}
+    D -->|"是"| E["保存到 Memory"]
+    D -->|"否"| F["继续"]
+    E --> G["下次会话自动加载"]
+</div></div>
+<p>Memory 有字符预算（默认 2,200 字符）。快满时需要<strong>合并优化</strong>——删掉过时条目、缩短冗余内容、为新事实腾空间。</p>
+</section>
+
+<hr>
+<section id="s3"><div class="section-title"><span class="num">3</span> 操作命令</div>
+<div class="code-block">
+<span class="c1"># 配置</span><br>
+hermes memory status &nbsp;&nbsp;<span class="c1"># 查看状态</span><br>
+hermes memory setup &nbsp;&nbsp;&nbsp;<span class="c1"># 配置 Backend</span><br>
+hermes memory off &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 关闭 Memory</span><br><br>
+<span class="c1"># config.yaml</span><br>
+<span class="c2">memory:</span><br>
+<span class="c2">  memory_enabled:</span> true<br>
+<span class="c2">  user_profile_enabled:</span> true<br>
+<span class="c2">  provider:</span> builtin &nbsp;<span class="c1"># builtin / honcho / mem0</span>
+</div>
+</section>
+
+<hr>
+<section id="s4"><div class="section-title"><span class="num">4</span> Memory Backend</div>
+<div class="card-grid">
+<div class="card"><h3>🏠 builtin</h3><p>默认。SQLite 存储，零配置。数据在 <code>state.db</code> 中。</p></div>
+<div class="card"><h3>🧠 Honcho</h3><p>独立 Memory 服务。支持向量搜索、对话级记忆隔离。需要 <code>hermes honcho setup</code>。</p></div>
+<div class="card"><h3>🧪 Mem0</h3><p>云端 Memory。自动提取实体、关系。适合多 Agent 共享记忆。</p></div>
+</div>
+</section>
+
+<hr>
+<section id="s5"><div class="section-title"><span class="num">5</span> 最佳实践</div>
+<div class="card-grid">
+<div class="card"><h3>✅ 该存的</h3><ul><li>用户偏好和习惯</li><li>环境配置路径</li><li>工具版本、兼容性问题</li><li>项目约定和命名规范</li></ul></div>
+<div class="card"><h3>❌ 不该存的</h3><ul><li>会话进度、TODO</li><li>临时文件路径</li><li>PR 号、Issue 号、commit SHA</li><li>一周内会过期的信息</li></ul></div>
+</div>
+<div class="takeaway"><div class="label">📌 要点</div><ul><li>User Profile 存"你是谁"，Agent Memory 存"什么环境"</li><li>Memory 自动注入 System Prompt，Agent 无需主动查询</li><li>字符预算有限，定期清理过时信息</li><li>不要存会话进度——用 session_search 回溯</li></ul></div>
+</section>

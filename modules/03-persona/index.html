@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>模块 3：系统提示词与人格 (Persona) — Hermes Agent 完全学习手册</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root {
+    --bg: #0d1117; --surface: #161b22; --surface2: #21262d; --border: #30363d;
+    --text: #e6edf3; --text2: #8b949e; --text3: #6e7681;
+    --accent: #58a6ff; --accent2: #79c0ff; --green: #3fb950;
+    --orange: #d2991d; --red: #f85149; --purple: #a371f7; --teal: #39d2c0;
+    --font: -apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+    --mono: 'JetBrains Mono','Cascadia Code','Consolas','SF Mono',monospace;
+    --radius: 8px; --radius-lg: 12px;
+    --mm-bg: #161b22; --mm-node-bg: #21262d; --mm-node-border: #58a6ff;
+    --mm-line: #8b949e; --mm-text: #e6edf3;
+  }
+  [data-theme="light"] {
+    --bg: #ffffff; --surface: #f6f8fa; --surface2: #eaeef2; --border: #d0d7de;
+    --text: #1f2328; --text2: #656d76; --text3: #8c959f;
+    --accent: #0969da; --accent2: #0550ae; --green: #1a7f37;
+    --orange: #9a6700; --red: #cf222e; --purple: #8250df; --teal: #1b7c83;
+    --mm-bg: #ffffff; --mm-node-bg: #f6f8fa; --mm-node-border: #0969da;
+    --mm-line: #656d76; --mm-text: #1f2328;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font); line-height:1.8; font-size:15px; transition:background .3s,color .3s; }
+  .container { max-width:920px; margin:0 auto; padding:50px 24px 80px; }
+  .theme-toggle { position:fixed; top:16px; right:16px; z-index:100; width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:var(--surface); color:var(--text); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+  .theme-toggle:hover { border-color:var(--accent); }
+  .hero { text-align:center; padding:60px 0 32px; border-bottom:1px solid var(--border); margin-bottom:40px; }
+  .hero .badge { display:inline-block; background:var(--surface2); color:var(--accent); padding:4px 16px; border-radius:20px; font-size:13px; font-weight:600; margin-bottom:16px; }
+  .hero h1 { font-size:44px; font-weight:800; letter-spacing:-1.5px; line-height:1.2; background:linear-gradient(135deg,var(--accent) 0%,var(--purple) 45%,var(--teal) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:12px; }
+  .hero .subtitle { color:var(--text2); font-size:17px; max-width:620px; margin:0 auto 8px; }
+  .hero .meta { color:var(--text3); font-size:13px; }
+  .toc { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px 28px; margin:24px 0; }
+  .toc h3 { font-size:15px; margin-bottom:12px; color:var(--accent); }
+  .toc ol { padding-left:20px; } .toc li { margin:4px 0; color:var(--text2); font-size:14px; } .toc li a { color:var(--accent2); text-decoration:none; } .toc li a:hover { text-decoration:underline; }
+  section { margin:48px 0; }
+  .section-title { font-size:26px; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:10px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+  .section-title .num { background:var(--accent); color:#fff; min-width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; flex-shrink:0; }
+  .section-subtitle { color:var(--text2); font-size:14px; margin-bottom:24px; margin-top:4px; }
+  .sub-title { font-size:19px; font-weight:700; margin:28px 0 12px; color:var(--accent2); }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; margin:16px 0; }
+  .card h3 { font-size:16px; margin-bottom:8px; } .card p,.card li { color:var(--text2); font-size:14px; }
+  .card-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:16px 0; }
+  .compare-table { width:100%; border-collapse:collapse; margin:16px 0; font-size:14px; }
+  .compare-table thead th { background:var(--surface2); text-align:left; padding:10px 16px; font-weight:600; border-bottom:1px solid var(--border); }
+  .compare-table td { padding:10px 16px; border-bottom:1px solid rgba(128,128,128,0.15); vertical-align:top; }
+  .compare-table tr:last-child td { border-bottom:none; } .compare-table .c1 { color:var(--green); font-weight:600; } .compare-table .c2 { color:var(--red); }
+  .code-block { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; margin:12px 0; font-family:var(--mono); font-size:13px; line-height:1.6; overflow-x:auto; color:var(--text); }
+  .code-block .c1 { color:var(--text3); } .code-block .c2 { color:var(--accent2); } .code-block .c3 { color:var(--green); } .code-block .c4 { color:var(--purple); }
+  .mermaid-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; margin:16px 0; overflow-x:auto; }
+  .mermaid-wrap svg { width: 100% !important; max-width: 100% !important; height: auto !important; }
+  .callout { border-left:3px solid var(--accent); padding:12px 16px; margin:16px 0; background:color-mix(in srgb,var(--accent) 6%,transparent); border-radius:0 var(--radius) var(--radius) 0; font-size:14px; }
+  .callout.warn { border-color:var(--orange); background:color-mix(in srgb,var(--orange) 6%,transparent); }
+  .callout.tip { border-color:var(--green); background:color-mix(in srgb,var(--green) 6%,transparent); }
+  .takeaway { background:color-mix(in srgb,var(--accent) 6%,transparent); border:1px solid var(--border); border-radius:var(--radius-lg); padding:16px 20px; margin:20px 0; }
+  .takeaway .label { font-size:12px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; } .takeaway ul { padding-left:18px; } .takeaway li { font-size:14px; margin:3px 0; }
+  .stack { display:flex; flex-direction:column; gap:2px; margin:16px 0; font-family:var(--mono); font-size:12px; }
+  .stack .l { padding:10px 16px; border-radius:var(--radius); display:flex; justify-content:space-between; align-items:center; background:var(--surface2); }
+  .stack .l:nth-child(1){border-left:3px solid #e94560}.stack .l:nth-child(2){border-left:3px solid #f5c518}
+  .stack .l:nth-child(3){border-left:3px solid var(--accent)}.stack .l:nth-child(4){border-left:3px solid var(--purple)}
+  .stack .l:nth-child(5){border-left:3px solid var(--teal)}.stack .l:nth-child(6){border-left:3px solid #f778ba}
+  .stack .l:nth-child(7){border-left:3px solid var(--text3)}.stack .l:nth-child(8){border-left:3px solid var(--green)}
+  .stack .lt { font-weight:600; color:var(--text); } .stack .ln { color:var(--text2); font-style:italic; }
+  .glossary-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:12px; margin:16px 0; }
+  .glossary-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:20px; text-align:center; transition:border-color .2s; }
+  .glossary-card:hover { border-color:var(--accent); }
+  .glossary-card .emoji { font-size:28px; margin-bottom:8px; } .glossary-card .title { font-weight:700; font-size:15px; margin-bottom:4px; }
+  .glossary-card .desc { color:var(--text2); font-size:13px; }
+  .faq-item { margin:12px 0; } .faq-q { font-weight:700; color:var(--accent2); font-size:15px; } .faq-a { color:var(--text2); font-size:14px; padding:6px 0 12px 16px; }
+  hr { border:none; border-top:1px solid var(--border); margin:40px 0; }
+  p { margin:10px 0; } code { background:var(--surface2); padding:2px 6px; border-radius:4px; font-family:var(--mono); font-size:13px; color:var(--text); } strong { color:var(--text); }
+  .page-nav { display:flex; justify-content:space-between; margin-top:48px; padding-top:20px; border-top:1px solid var(--border); }
+  .page-nav a { color:var(--accent); text-decoration:none; font-weight:600; } .page-nav a:hover { text-decoration:underline; }
+  @media (max-width:768px) { .container { padding:24px 16px 48px; } .hero h1 { font-size:30px; } .section-title { font-size:22px; } .card-grid { grid-template-columns:1fr; } .glossary-grid { grid-template-columns:repeat(2,1fr); } }
+</style>
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()" title="切换亮色/暗色主题">🌓</button>
+<script>
+const mc={startOnLoad:true,securityLevel:'loose',theme:'base',themeVariables:{background:'var(--mm-bg)',primaryColor:'var(--mm-node-bg)',primaryBorderColor:'var(--mm-node-border)',primaryTextColor:'var(--mm-text)',lineColor:'var(--mm-line)',nodeBorder:'var(--mm-node-border)',clusterBkg:'var(--mm-node-bg)',clusterBorder:'var(--mm-node-border)',titleColor:'var(--mm-text)',edgeLabelBackground:'var(--mm-bg)',fontSize:'16px'},flowchart:{useMaxWidth:true,htmlLabels:true,curve:'basis',padding:24,nodeSpacing:55,rankSpacing:65}};
+function im(){var s=getComputedStyle(document.documentElement);mc.themeVariables.background=s.getPropertyValue('--mm-bg').trim();mc.themeVariables.primaryColor=s.getPropertyValue('--mm-node-bg').trim();mc.themeVariables.primaryBorderColor=s.getPropertyValue('--mm-node-border').trim();mc.themeVariables.primaryTextColor=s.getPropertyValue('--mm-text').trim();mc.themeVariables.lineColor=s.getPropertyValue('--mm-line').trim();mc.themeVariables.clusterBkg=s.getPropertyValue('--mm-node-bg').trim();mc.themeVariables.edgeLabelBackground=s.getPropertyValue('--mm-bg').trim();mermaid.initialize(mc)}
+function toggleTheme(){var h=document.documentElement;var n=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('ht',n);im();var cs=document.querySelectorAll('.mermaid');cs.forEach(function(c){c.removeAttribute('data-processed');if(c.firstChild)c.innerHTML=c.firstChild.textContent});mermaid.run({querySelector:'.mermaid'})}
+(function(){var s=localStorage.getItem('ht');if(s)document.documentElement.setAttribute('data-theme',s);im()})()
+</script>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="badge">模块 3 / 10</div>
+    <h1>系统提示词与人格 (Persona)</h1>
+    <p class="subtitle">定义 Agent 的"灵魂"——名字、性格、说话方式、工作原则。这决定了它是冷冰冰的工具，还是一个贴心的伙伴。</p>
+    <p class="meta">预计阅读时间：20 分钟 · 前置：<a href="../01-core-concepts/" style="color:var(--accent)">模块 1</a> · <a href="../02-install-config/" style="color:var(--accent)">模块 2</a></p>
+  </div>
+
+  <div class="toc">
+    <h3>📑 本模块目录</h3>
+    <ol>
+      <li><a href="#s1">Persona 是什么？为什么重要？</a></li>
+      <li><a href="#s2">Persona 的完整结构</a></li>
+      <li><a href="#s3">SOUL.md —— 全局人格文件</a></li>
+      <li><a href="#s4">Project Context —— 项目级规则</a></li>
+      <li><a href="#s5">System Prompt 加载优先级</a></li>
+      <li><a href="#s6">Profile —— 多身份系统</a></li>
+      <li><a href="#s7">实战：编写你的第一个 Persona</a></li>
+      <li><a href="#s8">常见疑问</a></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════ 1 ═══════════════ -->
+  <section id="s1">
+    <div class="section-title"><span class="num">1</span> Persona 是什么？为什么重要？</div>
+
+    <p>Persona（人格）是 Hermes Agent 的<strong>角色定义</strong>——它告诉 LLM「你是谁」「你怎么说话」「你该怎么做」。没有 Persona，Agent 就是一张白纸，冷冰冰没有个性。</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>❌ 没有 Persona</h3>
+        <p>LLM 按默认风格回答。可能过于啰嗦、不停道歉、不敢做决定。像一个没有培训过的新员工。</p>
+      </div>
+      <div class="card">
+        <h3>✅ 有 Persona</h3>
+        <p>Agent 有名字、有性格、有工作原则。干练直接、不废话、知道什么该做什么不该做。像一个磨合好的老搭档。</p>
+      </div>
+    </div>
+
+    <p>Persona 是 System Prompt 的 <strong>Layer 1</strong>——优先级最高。它在所有其他内容之前注入到 LLM 的上下文中，是 Agent 行为的「<strong>底层操作系统</strong>」。</p>
+
+    <div class="stack">
+      <div class="l"><span class="lt">Layer 1 · Persona</span><span class="ln">名字、身份、性格、工作原则 ← 你在这里</span></div>
+      <div class="l"><span class="lt">Layer 2 · SOUL.md</span><span class="ln">全局身份</span></div>
+      <div class="l"><span class="lt">Layer 3 · User Profile</span><span class="ln">用户画像 (Memory)</span></div>
+      <div class="l"><span class="lt">Layer 4 · Agent Memory</span><span class="ln">Agent 笔记 (Memory)</span></div>
+      <div class="l"><span class="lt">Layer 5 · Skills</span><span class="ln">加载的技能</span></div>
+      <div class="l"><span class="lt">Layer 6 · Project Context</span><span class="ln">.hermes.md / AGENTS.md</span></div>
+      <div class="l"><span class="lt">Layer 7 · Environment Hints</span><span class="ln">OS · Shell · CWD</span></div>
+      <div class="l"><span class="lt">Layer 8 · Tools</span><span class="ln">tool schemas</span></div>
+    </div>
+
+    <div class="takeaway"><div class="label">📌 要点</div><ul><li>Persona 是 System Prompt 的<strong>第一层</strong>，优先级最高</li><li>它决定了 Agent 的行为底线——不会做的事永远不会做</li><li>好的 Persona 让你和 Agent 的协作效率提升数倍</li></ul></div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 2 ═══════════════ -->
+  <section id="s2">
+    <div class="section-title"><span class="num">2</span> Persona 的完整结构</div>
+    <div class="section-subtitle">一个完整的 Persona 由六个部分组成</div>
+
+    <div class="mermaid-wrap">
+      <div class="mermaid">
+flowchart TD
+    A["👤 Persona 六大模块"] --> B["1. 名字<br/>Agent 叫什么"]
+    A --> C["2. 身份<br/>定位是什么角色"]
+    A --> D["3. 性格与说话方式<br/>语气、语言、风格"]
+    A --> E["4. 工作原则<br/>怎么做事的底线"]
+    A --> F["5. 绝对不做的事<br/>硬约束"]
+    A --> G["6. 能力范围<br/>能干什么"]
+      </div>
+    </div>
+
+    <h3 class="sub-title">真实的 Persona 示例</h3>
+    <div class="code-block">
+<span class="c1"># 身份</span><br>
+<span class="c2">名字：</span>小bu<br>
+<span class="c2">定位：</span>万能机器人助手，什么任务都能接、都能干。<br><br>
+<span class="c1"># 性格与说话方式</span><br>
+<span class="c2">语言：</span>简体中文交流<br>
+<span class="c2">风格：</span>干练、直接、有底气——能做就做，不绕弯子<br>
+<span class="c2">底线：</span>不确定的事说"不确定"，不编造<br><br>
+<span class="c1"># 工作原则</span><br>
+<span class="c2">规则：</span>先想清楚再动手。最小改动，刚好够用。<br>
+<span class="c2">规则：</span>手术刀式修改——只动必须动的地方<br>
+<span class="c2">规则：</span>目标驱动，闭环验证<br><br>
+<span class="c1"># 绝对不做的事</span><br>
+<span class="c2">不编造：</span>不确定的 API、不存在的参数、猜测的命令输出<br>
+<span class="c2">不过度工程：</span>用户要一把螺丝刀，不给一套工具箱<br>
+<span class="c2">不偷偷重构：</span>没被要求的"顺便优化"是风险<br><br>
+<span class="c1"># 能力范围</span><br>
+写代码 / 调试 / 重构 / 设计架构 / 读源码 / 跑脚本 /<br>
+操作终端与文件 / 查资料 / 数据分析 / 自动化流程
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>1. 名字</h3>
+        <p>Agent 叫什么。看似简单，但对 LLM 来说是<strong>身份锚点</strong>——Agent 会用它自称，用户也用它称呼。</p>
+      </div>
+      <div class="card">
+        <h3>2. 身份</h3>
+        <p>Agent 是什么角色。<strong>定位决定行为边界</strong>。全栈开发？客服助手？数据分析师？不同定位会让 LLM 调用不同的"知识区域"。</p>
+      </div>
+      <div class="card">
+        <h3>3. 性格与说话方式</h3>
+        <p>语气、语言、风格偏好。<strong>这是最直接影响用户体验的部分。</strong>简洁 vs 详细、直接 vs 委婉、中文 vs 英文。</p>
+      </div>
+      <div class="card">
+        <h3>4. 工作原则</h3>
+        <p>做事的方法论。比如「先想清楚再动手」「最小改动原则」「目标驱动闭环验证」。这些是 Agent 的<strong>工作哲学</strong>。</p>
+      </div>
+      <div class="card">
+        <h3>5. 绝对不做的事</h3>
+        <p><strong>硬约束。</strong>不编造、不伪装成功、不过度工程。这些指令比「应该做」的优先级更高——LLM 必须遵守。</p>
+      </div>
+      <div class="card">
+        <h3>6. 能力范围</h3>
+        <p>Agent 能做什么。<strong>不是实际功能限制，而是引导 LLM 的思维方向。</strong>告诉它"你擅长这些"，它会优先用这些方向解决问题。</p>
+      </div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 3 ═══════════════ -->
+  <section id="s3">
+    <div class="section-title"><span class="num">3</span> SOUL.md —— 全局人格文件</div>
+    <div class="section-subtitle">独立于任何项目，始终加载的 Agent 身份定义</div>
+
+    <p><code>SOUL.md</code> 位于 <code>$HERMES_HOME/SOUL.md</code>。它是<strong>所有会话共享</strong>的全局人格——无论你在哪个目录下启动 Hermes，这个文件都会被加载。</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>📁 位置</h3>
+        <p><code>~/.hermes/SOUL.md</code>（默认）<br>或 <code>$HERMES_HOME/SOUL.md</code></p>
+        <p style="margin-top:8px;font-size:13px;">每个 Profile 可以有自己的 SOUL.md</p>
+      </div>
+      <div class="card">
+        <h3>⚡ 加载时机</h3>
+        <p><strong>每次新会话启动时</strong>自动注入到 System Prompt 的 Layer 2。</p>
+        <p style="margin-top:8px;font-size:13px;">修改 SOUL.md 后需要 <code>/reset</code> 或新会话生效</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <strong>💡 SOUL.md vs Persona：</strong><br>
+      SOUL.md 是<strong>独立文件</strong>，Persona 是 <strong>System Prompt 中的 Layer 1 文本块</strong>。两者可以共存——SOUL.md 适合放通用身份信息，Persona 适合放具体的任务级行为指令。优先级：<strong>Persona &gt; SOUL.md</strong>。
+    </div>
+
+    <h3 class="sub-title">SOUL.md 示例</h3>
+    <div class="code-block">
+<span class="c1"># Hermes Soul</span><br><br>
+<span class="c2">## 身份</span><br>
+我是一个 AI Agent，名字叫 Hermes。我由 Nous Research 开发。<br><br>
+<span class="c2">## 核心信念</span><br>
+- 诚实 > 讨好用户<br>
+- 实用 > 花哨<br>
+- 行动 > 描述<br><br>
+<span class="c2">## 说话风格</span><br>
+- 简洁直接，不绕弯子<br>
+- 不编造信息，不确定就说"不确定"<br>
+- 用工具做事，不只用嘴说
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 4 ═══════════════ -->
+  <section id="s4">
+    <div class="section-title"><span class="num">4</span> Project Context —— 项目级规则</div>
+    <div class="section-subtitle">让 Agent 了解当前项目的约定、风格和约束</div>
+
+    <p>Project Context 文件让 Agent 在<strong>特定项目目录下</strong>自动加载项目专属的规则和知识。这是让 Agent 从"通用助手"变成"项目专家"的关键。</p>
+
+    <table class="compare-table">
+      <thead><tr><th>文件</th><th>发现方式</th><th>何时用</th></tr></thead>
+      <tr><td><code>.hermes.md</code> / <code>HERMES.md</code></td><td><strong>向上遍历到 git root</strong></td><td>Hermes 专属规则，支持根目录 + 子目录层级继承</td></tr>
+      <tr><td><code>AGENTS.md</code></td><td>仅当前目录</td><td>跨 Agent 可移植（Claude Code / Codex 都认）</td></tr>
+      <tr><td><code>CLAUDE.md</code></td><td>仅当前目录</td><td>Claude Code 风格，功能同 AGENTS.md</td></tr>
+      <tr><td><code>.cursorrules</code></td><td>仅当前目录</td><td>从 Cursor IDE 迁移时使用</td></tr>
+    </table>
+
+    <div class="callout warn">
+      <strong>⚠ 先到先得，不叠加：</strong>按上表优先级，找到第一个就停止。如果你同时有 <code>.hermes.md</code> 和 <code>AGENTS.md</code>，只有 <code>.hermes.md</code> 会加载。单个文件上限 20,000 字符。
+    </div>
+
+    <h3 class="sub-title">.hermes.md 示例</h3>
+    <div class="code-block">
+<span class="c1"># 我的 Python 项目</span><br><br>
+<span class="c2">## 构建</span><br>
+- 使用 <span class="c4">uv run</span>，不要用 <span class="c4">pip install</span><br>
+- 提交前必须跑 <span class="c4">make test</span><br><br>
+<span class="c2">## 代码风格</span><br>
+- 用 <span class="c4">pathlib.Path</span> 而不是 <span class="c4">os.path</span><br>
+- 函数不超过 50 行<br>
+- 不要 <span class="c4">print()</span>，用 <span class="c4">logger</span><br><br>
+<span class="c2">## 测试</span><br>
+- 每个新功能必须有对应测试<br>
+- 用 pytest，不要用 unittest
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 5 ═══════════════ -->
+  <section id="s5">
+    <div class="section-title"><span class="num">5</span> System Prompt 加载优先级</div>
+    <div class="section-subtitle">理解各层的加载顺序和覆盖关系，避免"我明明写了规则为什么不生效"</div>
+
+    <div class="stack">
+      <div class="l"><span class="lt">🥇 Layer 1 · Persona</span><span class="ln">最高优先级 — Agent 行为的最底层约束</span></div>
+      <div class="l"><span class="lt">🥈 Layer 2 · SOUL.md</span><span class="ln">全局身份 — 跨项目共享</span></div>
+      <div class="l"><span class="lt">🥉 Layer 3 · User Profile</span><span class="ln">Memory 用户画像 — 偏好、环境</span></div>
+      <div class="l"><span class="lt">4 · Agent Memory</span><span class="ln">Memory Agent 笔记 — 经验、约定</span></div>
+      <div class="l"><span class="lt">5 · Active Skills</span><span class="ln">加载的技能文档</span></div>
+      <div class="l"><span class="lt">6 · Project Context</span><span class="ln">.hermes.md / AGENTS.md — 项目级</span></div>
+      <div class="l"><span class="lt">7 · Environment Hints</span><span class="ln">OS · Shell · CWD — 自动检测</span></div>
+      <div class="l"><span class="lt">8 · Tools + Enforcement</span><span class="ln">可用工具列表</span></div>
+    </div>
+
+    <div class="callout">
+      <strong>覆盖规则：</strong>上层指令<strong>覆盖</strong>下层。如果你在 Persona 里写了「不要说谢谢」，即使 Skill 里建议说谢谢，Agent 也不会说。<br>
+      <strong>但下层可以<em>补充</em>上层没有涉及的领域。</strong>比如 Persona 定义了说话风格，Project Context 可以补充"这个项目用 pytest 而不是 unittest"。
+    </div>
+
+    <div class="card-grid">
+      <div class="card"><h3>⏫ 改 Layer 1 (Persona)</h3><p>影响<strong>所有会话</strong>。适合改 Agent 的核心性格、说话方式、底线规则。</p></div>
+      <div class="card"><h3>📂 改 Layer 6 (Project Context)</h3><p>只影响<strong>特定项目目录</strong>。适合加项目构建命令、代码风格、测试框架。</p></div>
+      <div class="card"><h3>📝 改 Layer 5 (Skills)</h3><p>按会话按需加载。适合复杂工作流、API 参考、平台专属知识。</p></div>
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 6 ═══════════════ -->
+  <section id="s6">
+    <div class="section-title"><span class="num">6</span> Profile —— 多身份系统</div>
+    <div class="section-subtitle">一套机器，多个人格——工作用严肃的，个人用轻松的</div>
+
+    <p>如果你同时在多个项目（或不同身份）下使用 Hermes，Profile 让你可以<strong>为每个场景配置独立的 Persona、Skills、Memory 和配置</strong>。</p>
+
+    <div class="code-block">
+      <span class="c1"># 创建新 Profile</span><br>
+      hermes profile create work &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 工作用</span><br>
+      hermes profile create personal &nbsp;<span class="c1"># 个人用</span><br><br>
+      <span class="c1"># 切换 Profile</span><br>
+      hermes --profile work &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 以 work 身份启动</span><br>
+      hermes --profile personal &nbsp;&nbsp;<span class="c1"># 以 personal 身份启动</span><br><br>
+      <span class="c1"># 管理 Profile</span><br>
+      hermes profile list &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 列出所有</span><br>
+      hermes profile use work &nbsp;&nbsp;&nbsp;<span class="c1"># 设为默认</span>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>🧩 每个 Profile 独立拥有</h3>
+        <ul style="padding-left:18px;margin-top:8px;">
+          <li>自己的 <code>config.yaml</code>（不同模型、不同 Provider）</li>
+          <li>自己的 <code>.env</code>（不同 API Key）</li>
+          <li>自己的 <code>SOUL.md</code>（不同人格）</li>
+          <li>自己的 <code>skills/</code>（不同技能集）</li>
+          <li>自己的 Memory（不同记忆库）</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>💼 典型场景</h3>
+        <ul style="padding-left:18px;margin-top:8px;">
+          <li><strong>work</strong>：连公司 GitLab，用企业模型，加载内部 Skills</li>
+          <li><strong>personal</strong>：连个人 GitHub，用个人 Key，轻松性格</li>
+          <li><strong>opensource</strong>：专门维护开源项目的 Profile</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <strong>💡 Profile 彼此完全隔离。</strong>两个 Profile 之间的 Memory、Skills、配置互不影响。切换 Profile 就像换了一个全新的 Hermes 实例。
+    </div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 7 ═══════════════ -->
+  <section id="s7">
+    <div class="section-title"><span class="num">7</span> 实战：编写你的第一个 Persona</div>
+
+    <p>假设你要创建一个「代码审查助手」的 Persona。它应该：</p>
+    <ul style="padding-left:18px;">
+      <li>专注于代码质量而不是闲聊</li>
+      <li>用中文回复但保留代码术语英文</li>
+      <li>严格但不刻薄</li>
+      <li>不随便改代码，只给出建议</li>
+    </ul>
+
+    <p>把这个 Persona 写在 <code>~/.hermes/SOUL.md</code>：</p>
+
+    <div class="code-block">
+<span class="c1"># 代码审查助手</span><br><br>
+<span class="c2">## 身份</span><br>
+你叫 CodeCat，是一个代码审查助手。你专注于代码质量和安全。<br><br>
+<span class="c2">## 性格与说话方式</span><br>
+- 用<strong>简体中文</strong>交流，代码、技术术语保留原文<br>
+- <strong>直接但不刻薄</strong>——指出问题给建议，不人身攻击<br>
+- 会说"这段代码不错"——不只是挑刺<br><br>
+<span class="c2">## 工作原则</span><br>
+- 先理解代码意图，再给出建议<br>
+- 问题分级：🔴必须改 / 🟡建议改 / 🟢可选<br>
+- 每个建议都要给<strong>理由和示例</strong><br><br>
+<span class="c2">## 绝对不做的事</span><br>
+- 不自己改代码——只给建议<br>
+- 不评价代码风格除非影响可读性<br>
+- 不为"可能用到"的功能加代码<br><br>
+<span class="c2">## 能力范围</span><br>
+代码审查 / 安全检查 / 性能分析 / 最佳实践建议 / 测试建议
+    </div>
+
+    <div class="takeaway"><div class="label">📌 编写 Persona 的黄金法则</div><ul><li><strong>具体 > 抽象：</strong>"不编造 API 参数"比"要诚实"有效 10 倍</li><li><strong>反面清单 > 正面清单：</strong>"不要做的事"比"应该做的事"更不容易被忽略</li><li><strong>例子 > 描述：</strong>给出具体场景的行为示例</li><li><strong>测试 → 迭代：</strong>写完后实际用几次，观察哪里不符合预期，再改</li></ul></div>
+  </section>
+
+  <hr>
+
+  <!-- ═══════════════ 8 ═══════════════ -->
+  <section id="s8">
+    <div class="section-title"><span class="num">8</span> 常见疑问</div>
+    <div class="faq-item"><div class="faq-q">Q: Persona 写多长合适？</div><div class="faq-a">200-800 词最佳。太短约束不够，太长 LLM 可能忽略后半部分。核心约束放前面。</div></div>
+    <div class="faq-item"><div class="faq-q">Q: Persona 和 SOUL.md 有什么区别？</div><div class="faq-a">Persona 是配置里的文本块（Layer 1），SOUL.md 是独立文件（Layer 2）。Persona 优先级更高，适合放任务级行为指令；SOUL.md 放通用身份信息。</div></div>
+    <div class="faq-item"><div class="faq-q">Q: 改 Persona 后要重启吗？</div><div class="faq-a">需要 <code>/reset</code> 或新会话。Persona 是 System Prompt 的一部分，会话内不变（支持 Prompt Caching）。</div></div>
+    <div class="faq-item"><div class="faq-q">Q: 怎么确认 Persona 生效了？</div><div class="faq-a">最直接的方法：问 Agent「你是谁？」「你叫什么名字？」。如果它按你定义的回答，就说明加载成功。</div></div>
+    <div class="faq-item"><div class="faq-q">Q: 多个 Project Context 文件能共存吗？</div><div class="faq-a">不能。<strong>先到先得，不叠加。</strong>优先级：<code>.hermes.md</code> &gt; <code>AGENTS.md</code> &gt; <code>CLAUDE.md</code> &gt; <code>.cursorrules</code>。找到一个就停。</div></div>
+  </section>
+
+  <hr>
+  <div class="page-nav">
+    <a href="../02-install-config/">← 模块 2：安装、配置与 Provider</a>
+    <a href="#">模块 4：工具系统 (Tools) →</a>
+  </div>
+
+</div>
+</body>
+</html>
