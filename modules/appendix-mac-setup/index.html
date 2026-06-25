@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>附录：本地安全运行指南 — Hermes Agent 完全学习手册</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--text3:#6e7681;--accent:#58a6ff;--accent2:#79c0ff;--green:#3fb950;--orange:#d2991d;--red:#f85149;--purple:#a371f7;--teal:#39d2c0;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;--mono:'JetBrains Mono','Cascadia Code','Consolas','SF Mono',monospace;--radius:8px;--radius-lg:12px;--mm-bg:#161b22;--mm-node-bg:#21262d;--mm-node-border:#58a6ff;--mm-line:#8b949e;--mm-text:#e6edf3}
+  [data-theme="light"]{--bg:#fff;--surface:#f6f8fa;--surface2:#eaeef2;--border:#d0d7de;--text:#1f2328;--text2:#656d76;--text3:#8c959f;--accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--orange:#9a6700;--red:#cf222e;--purple:#8250df;--teal:#1b7c83;--mm-bg:#fff;--mm-node-bg:#f6f8fa;--mm-node-border:#0969da;--mm-line:#656d76;--mm-text:#1f2328}
+  *{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.8;font-size:15px;transition:background .3s,color .3s}.container{max-width:920px;margin:0 auto;padding:50px 24px 80px}.theme-toggle{position:fixed;top:16px;right:16px;z-index:100;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}.theme-toggle:hover{border-color:var(--accent)}.hero{text-align:center;padding:60px 0 32px;border-bottom:1px solid var(--border);margin-bottom:40px}.hero .badge{display:inline-block;background:var(--surface2);color:var(--accent);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:16px}.hero h1{font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1.2;background:linear-gradient(135deg,var(--accent) 0%,var(--purple) 45%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero .subtitle{color:var(--text2);font-size:17px;max-width:620px;margin:0 auto 8px}.hero .meta{color:var(--text3);font-size:13px}.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 28px;margin:24px 0}.toc h3{font-size:15px;margin-bottom:12px;color:var(--accent)}.toc ol{padding-left:20px}.toc li{margin:4px 0;color:var(--text2);font-size:14px}.toc li a{color:var(--accent2);text-decoration:none}.toc li a:hover{text-decoration:underline}section{margin:48px 0}.section-title{font-size:26px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}.section-title .num{background:var(--accent);color:#fff;min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}.section-subtitle{color:var(--text2);font-size:14px;margin-bottom:24px;margin-top:4px}.sub-title{font-size:19px;font-weight:700;margin:28px 0 12px;color:var(--accent2)}.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:16px 0}.card h3{font-size:16px;margin-bottom:8px}.card p,.card li{color:var(--text2);font-size:14px}.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:16px 0}.compare-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}.compare-table thead th{background:var(--surface2);text-align:left;padding:10px 16px;font-weight:600;border-bottom:1px solid var(--border)}.compare-table td{padding:10px 16px;border-bottom:1px solid rgba(128,128,128,0.15);vertical-align:top}.compare-table tr:last-child td{border-bottom:none}.compare-table .c1{color:var(--green);font-weight:600}.compare-table .c2{color:var(--red)}.code-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:auto;color:var(--text)}.code-block .c1{color:var(--text3)}.code-block .c2{color:var(--accent2)}.code-block .c3{color:var(--green)}.code-block .c4{color:var(--purple)}.mermaid-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:16px 0;overflow-x:auto}.mermaid-wrap svg{width:100%!important;max-width:100%!important;height:auto!important}.callout{border-left:3px solid var(--accent);padding:12px 16px;margin:16px 0;background:color-mix(in srgb,var(--accent) 6%,transparent);border-radius:0 var(--radius) var(--radius) 0;font-size:14px}.callout.warn{border-color:var(--orange);background:color-mix(in srgb,var(--orange) 6%,transparent)}.callout.tip{border-color:var(--green);background:color-mix(in srgb,var(--green) 6%,transparent)}.callout.think{border-color:var(--purple);background:color-mix(in srgb,var(--purple) 6%,transparent)}.takeaway{background:color-mix(in srgb,var(--accent) 6%,transparent);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin:20px 0}.takeaway .label{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}.takeaway ul{padding-left:18px}.takeaway li{font-size:14px;margin:3px 0}.faq-item{margin:12px 0}.faq-q{font-weight:700;color:var(--accent2);font-size:15px}.faq-a{color:var(--text2);font-size:14px;padding:6px 0 12px 16px}hr{border:none;border-top:1px solid var(--border);margin:40px 0}p{margin:10px 0}code{background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:13px;color:var(--text)}strong{color:var(--text)}.page-nav{display:flex;justify-content:space-between;margin-top:48px;padding-top:20px;border-top:1px solid var(--border)}.page-nav a{color:var(--accent);text-decoration:none;font-weight:600}.page-nav a:hover{text-decoration:underline}@media(max-width:768px){.container{padding:24px 16px 48px}.hero h1{font-size:30px}.section-title{font-size:22px}.card-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<script>
+const mc={startOnLoad:true,securityLevel:'loose',theme:'base',themeVariables:{background:'var(--mm-bg)',primaryColor:'var(--mm-node-bg)',primaryBorderColor:'var(--mm-node-border)',primaryTextColor:'var(--mm-text)',lineColor:'var(--mm-line)',nodeBorder:'var(--mm-node-border)',clusterBkg:'var(--mm-node-bg)',clusterBorder:'var(--mm-node-border)',titleColor:'var(--mm-text)',edgeLabelBackground:'var(--mm-bg)',fontSize:'16px'},flowchart:{useMaxWidth:true,htmlLabels:true,curve:'basis',padding:24,nodeSpacing:55,rankSpacing:65}};
+function im(){var s=getComputedStyle(document.documentElement);mc.themeVariables.background=s.getPropertyValue('--mm-bg').trim();mc.themeVariables.primaryColor=s.getPropertyValue('--mm-node-bg').trim();mc.themeVariables.primaryBorderColor=s.getPropertyValue('--mm-node-border').trim();mc.themeVariables.primaryTextColor=s.getPropertyValue('--mm-text').trim();mc.themeVariables.lineColor=s.getPropertyValue('--mm-line').trim();mc.themeVariables.clusterBkg=s.getPropertyValue('--mm-node-bg').trim();mc.themeVariables.edgeLabelBackground=s.getPropertyValue('--mm-bg').trim();mermaid.initialize(mc)}
+function toggleTheme(){var h=document.documentElement;var n=h.getAttribute('data-theme')==='dark'?'light':'dark';h.setAttribute('data-theme',n);localStorage.setItem('ht',n);im();var cs=document.querySelectorAll('.mermaid');cs.forEach(function(c){c.removeAttribute('data-processed');if(c.firstChild)c.innerHTML=c.firstChild.textContent});mermaid.run({querySelector:'.mermaid'})}
+(function(){var s=localStorage.getItem('ht');if(s)document.documentElement.setAttribute('data-theme',s);im()})()
+</script>
+<div class="container">
+
+<div class="hero">
+<div class="badge">附录</div>
+<h1>本地安全运行指南</h1>
+<p class="subtitle">在 Mac 上用 Apple Container 搭建隔离的 Hermes Agent 环境——进程 VM 级隔离、对外暴露 API、数据不出本机。</p>
+<p class="meta">预计阅读时间：15 分钟 · 前置：<a href="../02-install-config/" style="color:var(--accent)">模块 2</a></p>
+</div>
+
+<div class="toc"><h3>📑 本附录目录</h3><ol>
+<li><a href="#s0">快速开始</a></li><li><a href="#s1">方案概述</a></li><li><a href="#s2">分层架构</a></li><li><a href="#s3">完整搭建流程</a></li><li><a href="#s4">调用方法</a></li><li><a href="#s5">安全设计</a></li><li><a href="#s6">运维命令</a></li><li><a href="#s7">常见问题</a></li>
+</ol></div>
+
+<!-- ═══════════════ 0 ═══════════════ -->
+<section id="s0">
+<div class="section-title"><span class="num">0</span> 快速开始</div>
+<div class="code-block">
+<span class="c1"># 1. 安装 Apple container（macOS 15+ / Apple 芯片）</span><br>brew install --cask container<br>container system start<br><br>
+<span class="c1"># 2. 建数据目录</span><br>mkdir -p ~/.hermes<br><br>
+<span class="c1"># 3. 交互式配置模型</span><br>container run -it --rm -v ~/.hermes:/opt/data nousresearch/hermes-agent setup<br><br>
+<span class="c1"># 4. 配置 API Server（追加到 ~/.hermes/.env）</span><br>API_SERVER_ENABLED=true<br>API_SERVER_HOST=0.0.0.0<br>API_SERVER_PORT=8642<br>API_SERVER_KEY=<span class="c3">&lt;你的随机密钥&gt;</span><br><br>
+<span class="c1"># 5. 启动容器</span><br>container run -d --name hermes -c 4 -m 8G \<br>&nbsp;&nbsp;-v ~/.hermes:/opt/data \<br>&nbsp;&nbsp;-p 127.0.0.1:9119:9119 -p 127.0.0.1:8642:8642 \<br>&nbsp;&nbsp;-e HERMES_DASHBOARD=1 \<br>&nbsp;&nbsp;nousresearch/hermes-agent gateway run<br><br>
+<span class="c1"># 6. 使用</span><br><span class="c1">#   Web 控制台：http://localhost:9119</span><br><span class="c1">#   API：       http://localhost:8642/v1</span>
+</div>
+</section>
+
+<hr>
+<section id="s1">
+<div class="section-title"><span class="num">1</span> 方案概述</div>
+<table class="compare-table">
+<tr><td><strong>目标</strong></td><td>本地搭建可隔离、可编程调用的 AI Agent 执行环境</td></tr>
+<tr><td><strong>底座</strong></td><td>Apple container（轻量 VM）运行 Hermes Agent，进程 VM 级隔离</td></tr>
+<tr><td><strong>接口</strong></td><td>OpenAI 兼容 API（<code>http://127.0.0.1:8642/v1</code>），任意 OpenAI SDK 直连</td></tr>
+<tr><td><strong>模型</strong></td><td>可接任何 OpenAI 兼容端点（OpenRouter / Anthropic / 自定义网关 / 本地模型）</td></tr>
+<tr><td><strong>能力</strong></td><td>Agent 能真正调工具（终端 / 文件 / 浏览器）执行任务</td></tr>
+<tr><td><strong>入口</strong></td><td>HTTP API + Web Dashboard + 飞书/Telegram 等消息平台</td></tr>
+</table>
+</section>
+
+<hr>
+<section id="s2">
+<div class="section-title"><span class="num">2</span> 分层架构</div>
+<div class="mermaid-wrap"><div class="mermaid">
+flowchart TD
+    A["调用方<br/>Python SDK / curl / 自动化流程"] --> B["接入层<br/>API Server :8642 / Dashboard :9119"]
+    B --> C["Agent 运行时<br/>Hermes Agent<br/>工具调用 · 推理 · 记忆"]
+    C --> D["隔离层<br/>Apple Container (VM)<br/>仅挂载 ~/.hermes"]
+    D --> E["宿主机 macOS"]
+</div></div>
+</section>
+
+<hr>
+<section id="s3">
+<div class="section-title"><span class="num">3</span> 完整搭建流程</div>
+
+<h3 class="sub-title">3.1 前提：安装 Apple container</h3>
+<p>需要 macOS 15+ / Apple 芯片。</p>
+<div class="code-block">brew install --cask container<br>container --version &nbsp;<span class="c1"># 应 ≥ 1.0</span><br>container system start &nbsp;<span class="c1"># 首次启动系统</span></div>
+
+<h3 class="sub-title">3.2 建数据目录</h3>
+<div class="code-block">mkdir -p ~/.hermes</div>
+<p>配置、密钥、会话、Agent 自装依赖全落在这里。容器删了也不丢。备份整个 <code>~/.hermes</code> 即可迁移。</p>
+
+<h3 class="sub-title">3.3 交互式配置模型</h3>
+<div class="code-block">container run -it --rm -v ~/.hermes:/opt/data nousresearch/hermes-agent setup</div>
+<p>向导关键选择：</p>
+<ul style="padding-left:18px;color:var(--text2);">
+<li><strong>Provider</strong> → 选你用的（OpenRouter / Anthropic / Custom 等）</li>
+<li>如果用自定义端点（如内网模型网关或本地 Ollama）→ 选 <strong>Custom OpenAI-compatible endpoint</strong>，填 base_url + API key + 模型名</li>
+<li>其余（TTS/图像/消息平台）可先 Skip</li>
+</ul>
+<p>配置写到 <code>~/.hermes/config.yaml</code> 和 <code>~/.hermes/.env</code>。</p>
+
+<h3 class="sub-title">3.4 开启 Dashboard 认证</h3>
+<p>编辑 <code>~/.hermes/config.yaml</code>，加入：</p>
+<div class="code-block"><span class="c2">dashboard:</span><br><span class="c2">  basic_auth:</span><br><span class="c2">    username:</span> 'admin'<br><span class="c2">    password_hash:</span> '<span class="c3">scrypt$...</span>'</div>
+<p>生成密码哈希：</p>
+<div class="code-block">container run --rm nousresearch/hermes-agent \<br>&nbsp;&nbsp;python -c "from plugins.dashboard_auth.basic import hash_password; print(hash_password('<span class="c3">&lt;你的密码&gt;</span>'))"</div>
+
+<h3 class="sub-title">3.5 开启 API Server</h3>
+<p>在 <code>~/.hermes/.env</code> 追加：</p>
+<div class="code-block"><span class="c1"># OpenAI-Compatible API Server</span><br>API_SERVER_ENABLED=true<br>API_SERVER_HOST=0.0.0.0<br>API_SERVER_PORT=8642<br>API_SERVER_KEY=<span class="c3">&lt;你的随机长字符串&gt;</span></div>
+<p>生成随机 key：<code>openssl rand -base64 32</code>，调 API 时当 Bearer token 用。</p>
+
+<h3 class="sub-title">3.6 启动容器</h3>
+<div class="code-block">container rm -f hermes 2>/dev/null<br>container run -d \<br>&nbsp;&nbsp;--name hermes \<br>&nbsp;&nbsp;-c 4 -m 8G \<br>&nbsp;&nbsp;-v ~/.hermes:/opt/data \<br>&nbsp;&nbsp;-p 127.0.0.1:9119:9119 \<br>&nbsp;&nbsp;-p 127.0.0.1:8642:8642 \<br>&nbsp;&nbsp;-e HERMES_DASHBOARD=1 \<br>&nbsp;&nbsp;nousresearch/hermes-agent gateway run</div>
+
+<div class="callout warn"><strong>⚠ 各参数说明：</strong>
+<table class="compare-table" style="margin-top:8px;">
+<tr><td><code>-c 4 -m 8G</code></td><td>必须带。默认只给 1GB 内存，Agent 跑任务会卡死</td></tr>
+<tr><td><code>-p 127.0.0.1:...</code></td><td>绑 127.0.0.1 只允许本机访问，不暴露给局域网</td></tr>
+<tr><td><code>-e HERMES_DASHBOARD=1</code></td><td>开启 Web 控制台</td></tr>
+</table>
+<strong>改了 .env 必须 rm 重建：</strong><code>container start</code> 不会重读环境变量。</div>
+</section>
+
+<hr>
+<section id="s4">
+<div class="section-title"><span class="num">4</span> 调用方法</div>
+
+<div class="card"><h3>🔑 接入信息</h3><p>Base URL: <code>http://127.0.0.1:8642/v1</code> · API Key: 你配的 <code>API_SERVER_KEY</code> · Model: <code>hermes-agent</code></p></div>
+
+<h3 class="sub-title">同步请求</h3>
+<div class="code-block">curl http://127.0.0.1:8642/v1/chat/completions \<br>&nbsp;&nbsp;-H "Authorization: Bearer <span class="c3">&lt;API_SERVER_KEY&gt;</span>" \<br>&nbsp;&nbsp;-H "Content-Type: application/json" \<br>&nbsp;&nbsp;-d '{"model":"hermes-agent","messages":[{"role":"user","content":"你的任务"}],"stream":false}'</div>
+
+<h3 class="sub-title">Python SDK</h3>
+<div class="code-block"><span class="c4">from</span> openai <span class="c4">import</span> OpenAI<br>client = OpenAI(base_url=<span class="c3">"http://127.0.0.1:8642/v1"</span>, api_key=<span class="c3">"&lt;API_SERVER_KEY&gt;"</span>)<br>r = client.chat.completions.create(<br>&nbsp;&nbsp;&nbsp;&nbsp;model=<span class="c3">"hermes-agent"</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;messages=[{<span class="c3">"role"</span>: <span class="c3">"user"</span>, <span class="c3">"content"</span>: <span class="c3">"任务描述"</span>}])<br>print(r.choices[0].message.content)</div>
+
+<h3 class="sub-title">会话连续性</h3>
+<p>每次请求带同一个 <code>X-Hermes-Session-Id</code> header，Agent 就能续在同一会话里：</p>
+<div class="code-block">curl ... -H <span class="c3">"X-Hermes-Session-Id: my-chat-001"</span> ...</div>
+<div class="code-block"><span class="c1"># Python SDK</span><br>r = client.chat.completions.create(<br>&nbsp;&nbsp;&nbsp;&nbsp;model=<span class="c3">"hermes-agent"</span>,<br>&nbsp;&nbsp;&nbsp;&nbsp;messages=[...],<br>&nbsp;&nbsp;&nbsp;&nbsp;extra_headers={<span class="c3">"X-Hermes-Session-Id"</span>: <span class="c3">"my-chat-001"</span>})</div>
+</section>
+
+<hr>
+<section id="s5">
+<div class="section-title"><span class="num">5</span> 安全设计</div>
+<table class="compare-table">
+<tr><td><strong>进程隔离</strong></td><td>Agent 跑在 Apple Container（VM）内，宿主机文件系统不可达</td></tr>
+<tr><td><strong>文件边界</strong></td><td>仅挂载 <code>~/.hermes</code> 一个目录，Mac 其他文件碰不到</td></tr>
+<tr><td><strong>网络封闭</strong></td><td>API/Dashboard 端口只绑 127.0.0.1，局域网不可访问</td></tr>
+<tr><td><strong>密钥本地</strong></td><td>配置与凭证全部存本地 <code>~/.hermes</code>，不上传第三方</td></tr>
+</table>
+<div class="callout warn"><strong>⚠ 安全提醒：</strong><code>~/.hermes/.env</code> 和 <code>config.yaml</code> 里包含你的 API key 和密码。<strong>不要把这些文件或真实凭证分享出去。</strong>本文档中所有示例均为通用占位符，不含真实凭证。</div>
+</section>
+
+<hr>
+<section id="s6">
+<div class="section-title"><span class="num">6</span> 常用运维命令</div>
+<div class="code-block">container ls &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 查看运行中的容器</span><br>container logs -f hermes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 实时日志</span><br>container stop hermes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 停止</span><br>container start hermes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 启动（不重读 .env）</span><br>container rm -f hermes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 删除容器（配置保留）</span><br>container exec -it hermes bash &nbsp;<span class="c1"># 进入容器排查</span><br><br><span class="c1"># 健康检查</span><br>curl -s http://127.0.0.1:9119/api/status | python3 -m json.tool</div>
+</section>
+
+<hr>
+<section id="s7">
+<div class="section-title"><span class="num">7</span> 常见问题</div>
+<div class="faq-item"><div class="faq-q">Q: localhost:8642/9119 连不上？</div><div class="faq-a">确认启动命令带了对应的 <code>-p</code> 端口映射，且 <code>container logs hermes</code> 没报错。Dashboard 是 9119，API 是 8642。</div></div>
+<div class="faq-item"><div class="faq-q">Q: Dashboard 拒绝启动？</div><div class="faq-a">没配认证。按 3.4 节填 basic_auth 用户名 + 密码哈希后重建容器。</div></div>
+<div class="faq-item"><div class="faq-q">Q: 执行任务很卡？</div><div class="faq-a">内存不够。确认启动带了 <code>-m 8G</code>（默认才 1G）。</div></div>
+<div class="faq-item"><div class="faq-q">Q: 改了 .env 不生效？</div><div class="faq-a"><code>container start</code> 不会重读环境变量。需要 <code>container rm -f hermes</code> 然后重新 <code>container run</code>。</div></div>
+<div class="faq-item"><div class="faq-q">Q: 重启后容器 IP 变了？</div><div class="faq-a">正常。Apple container IP 每次重启重分配。用 <code>-p 127.0.0.1:端口:端口</code> 映射后，始终用 localhost 访问即可。</div></div>
+</section>
+
+<hr>
+<div class="page-nav">
+<a href="../10-advanced/">← 模块 10：进阶特性</a>
+<span></span>
+</div>
+
+</div></body></html>
