@@ -8,7 +8,7 @@
 <style>
   :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--text:#e6edf3;--text2:#8b949e;--text3:#6e7681;--accent:#58a6ff;--accent2:#79c0ff;--green:#3fb950;--orange:#d2991d;--red:#f85149;--purple:#a371f7;--teal:#39d2c0;--font:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;--mono:'JetBrains Mono','Cascadia Code','Consolas','SF Mono',monospace;--radius:8px;--radius-lg:12px;--mm-bg:#161b22;--mm-node-bg:#21262d;--mm-node-border:#58a6ff;--mm-line:#8b949e;--mm-text:#e6edf3}
   [data-theme="light"]{--bg:#fff;--surface:#f6f8fa;--surface2:#eaeef2;--border:#d0d7de;--text:#1f2328;--text2:#656d76;--text3:#8c959f;--accent:#0969da;--accent2:#0550ae;--green:#1a7f37;--orange:#9a6700;--red:#cf222e;--purple:#8250df;--teal:#1b7c83;--mm-bg:#fff;--mm-node-bg:#f6f8fa;--mm-node-border:#0969da;--mm-line:#656d76;--mm-text:#1f2328}
-  *{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.8;font-size:15px;transition:background .3s,color .3s}.container{max-width:920px;margin:0 auto;padding:50px 24px 80px}.theme-toggle{position:fixed;top:16px;right:16px;z-index:100;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}.theme-toggle:hover{border-color:var(--accent)}.hero{text-align:center;padding:60px 0 32px;border-bottom:1px solid var(--border);margin-bottom:40px}.hero .badge{display:inline-block;background:var(--surface2);color:var(--accent);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:16px}.hero h1{font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1.2;background:linear-gradient(135deg,var(--accent) 0%,var(--purple) 45%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero .subtitle{color:var(--text2);font-size:17px;max-width:620px;margin:0 auto 8px}.hero .meta{color:var(--text3);font-size:13px}.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 28px;margin:24px 0}.toc h3{font-size:15px;margin-bottom:12px;color:var(--accent)}.toc ol{padding-left:20px}.toc li{margin:4px 0;color:var(--text2);font-size:14px}.toc li a{color:var(--accent2);text-decoration:none}.toc li a:hover{text-decoration:underline}section{margin:48px 0}.section-title{font-size:26px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}.section-title .num{background:var(--accent);color:#fff;min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}.section-subtitle{color:var(--text2);font-size:14px;margin-bottom:24px;margin-top:4px}.sub-title{font-size:19px;font-weight:700;margin:28px 0 12px;color:var(--accent2)}.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:16px 0}.card h3{font-size:16px;margin-bottom:8px}.card p,.card li{color:var(--text2);font-size:14px}.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:16px 0}.compare-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}.compare-table thead th{background:var(--surface2);text-align:left;padding:10px 16px;font-weight:600;border-bottom:1px solid var(--border)}.compare-table td{padding:10px 16px;border-bottom:1px solid rgba(128,128,128,0.15);vertical-align:top}.compare-table tr:last-child td{border-bottom:none}.compare-table .c1{color:var(--green);font-weight:600}.compare-table .c2{color:var(--red)}.code-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:auto;color:var(--text)}.code-block .c1{color:var(--text3)}.code-block .c2{color:var(--accent2)}.code-block .c3{color:var(--green)}.code-block .c4{color:var(--purple)}.mermaid-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:16px 0;overflow-x:auto}.mermaid-wrap svg{width:100%!important;max-width:100%!important;height:auto!important}.callout{border-left:3px solid var(--accent);padding:12px 16px;margin:16px 0;background:color-mix(in srgb,var(--accent) 6%,transparent);border-radius:0 var(--radius) var(--radius) 0;font-size:14px}.callout.warn{border-color:var(--orange);background:color-mix(in srgb,var(--orange) 6%,transparent)}.callout.tip{border-color:var(--green);background:color-mix(in srgb,var(--green) 6%,transparent)}.callout.think{border-color:var(--purple);background:color-mix(in srgb,var(--purple) 6%,transparent)}.takeaway{background:color-mix(in srgb,var(--accent) 6%,transparent);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin:20px 0}.takeaway .label{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}.takeaway ul{padding-left:18px}.takeaway li{font-size:14px;margin:3px 0}.faq-item{margin:12px 0}.faq-q{font-weight:700;color:var(--accent2);font-size:15px}.faq-a{color:var(--text2);font-size:14px;padding:6px 0 12px 16px}hr{border:none;border-top:1px solid var(--border);margin:40px 0}p{margin:10px 0}code{background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:13px;color:var(--text)}strong{color:var(--text)}.page-nav{display:flex;justify-content:space-between;margin-top:48px;padding-top:20px;border-top:1px solid var(--border)}.page-nav a{color:var(--accent);text-decoration:none;font-weight:600}.page-nav a:hover{text-decoration:underline}@media(max-width:768px){.container{padding:24px 16px 48px}.hero h1{font-size:30px}.section-title{font-size:22px}.card-grid{grid-template-columns:1fr}}
+  *{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.8;font-size:15px;transition:background .3s,color .3s}.container{max-width:920px;margin:0 auto;padding:50px 24px 80px}.theme-toggle{position:fixed;top:16px;right:16px;z-index:100;width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}.theme-toggle:hover{border-color:var(--accent)}.hero{text-align:center;padding:60px 0 32px;border-bottom:1px solid var(--border);margin-bottom:40px}.hero .badge{display:inline-block;background:var(--surface2);color:var(--accent);padding:4px 16px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:16px}.hero h1{font-size:44px;font-weight:800;letter-spacing:-1.5px;line-height:1.2;background:linear-gradient(135deg,var(--accent) 0%,var(--purple) 45%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}.hero .subtitle{color:var(--text2);font-size:17px;max-width:620px;margin:0 auto 8px}.hero .meta{color:var(--text3);font-size:13px}.version-badge{display:inline-block;background:color-mix(in srgb,var(--green) 15%,transparent);color:var(--green);padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600}.toc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 28px;margin:24px 0}.toc h3{font-size:15px;margin-bottom:12px;color:var(--accent)}.toc ol{padding-left:20px}.toc li{margin:4px 0;color:var(--text2);font-size:14px}.toc li a{color:var(--accent2);text-decoration:none}.toc li a:hover{text-decoration:underline}section{margin:48px 0}.section-title{font-size:26px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--border)}.section-title .num{background:var(--accent);color:#fff;min-width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0}.section-subtitle{color:var(--text2);font-size:14px;margin-bottom:24px;margin-top:4px}.sub-title{font-size:19px;font-weight:700;margin:28px 0 12px;color:var(--accent2)}.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:16px 0}.card h3{font-size:16px;margin-bottom:8px}.card p,.card li{color:var(--text2);font-size:14px}.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:16px 0}.compare-table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}.compare-table thead th{background:var(--surface2);text-align:left;padding:10px 16px;font-weight:600;border-bottom:1px solid var(--border)}.compare-table td{padding:10px 16px;border-bottom:1px solid rgba(128,128,128,0.15);vertical-align:top}.compare-table tr:last-child td{border-bottom:none}.code-block{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin:12px 0;font-family:var(--mono);font-size:13px;line-height:1.6;overflow-x:auto;color:var(--text)}.code-block .c1{color:var(--text3)}.code-block .c2{color:var(--accent2)}.code-block .c3{color:var(--green)}.code-block .c4{color:var(--purple)}.mermaid-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:16px 0;overflow-x:auto}.mermaid-wrap svg{width:100%!important;max-width:100%!important;height:auto!important}.callout{border-left:3px solid var(--accent);padding:12px 16px;margin:16px 0;background:color-mix(in srgb,var(--accent) 6%,transparent);border-radius:0 var(--radius) var(--radius) 0;font-size:14px}.callout.warn{border-color:var(--orange);background:color-mix(in srgb,var(--orange) 6%,transparent)}.callout.tip{border-color:var(--green);background:color-mix(in srgb,var(--green) 6%,transparent)}.callout.think{border-color:var(--purple);background:color-mix(in srgb,var(--purple) 6%,transparent)}.callout.danger{border-color:var(--red);background:color-mix(in srgb,var(--red) 6%,transparent)}.takeaway{background:color-mix(in srgb,var(--accent) 6%,transparent);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin:20px 0}.takeaway .label{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}.takeaway ul{padding-left:18px}.takeaway li{font-size:14px;margin:3px 0}.checklist{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;margin:16px 0}.checklist h3{font-size:16px;margin-bottom:12px;color:var(--accent)}.checklist .item{padding:6px 0;font-size:14px;color:var(--text2);display:flex;align-items:flex-start;gap:8px}.checklist .item input{flex-shrink:0;margin-top:4px;accent-color:var(--accent)}.faq-item{margin:12px 0}.faq-q{font-weight:700;color:var(--accent2);font-size:15px}.faq-a{color:var(--text2);font-size:14px;padding:6px 0 12px 16px}hr{border:none;border-top:1px solid var(--border);margin:40px 0}p{margin:10px 0}code{background:var(--surface2);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:13px;color:var(--text)}strong{color:var(--text)}.page-nav{display:flex;justify-content:space-between;margin-top:48px;padding-top:20px;border-top:1px solid var(--border)}.page-nav a{color:var(--accent);text-decoration:none;font-weight:600}.page-nav a:hover{text-decoration:underline}.step-num{display:inline-block;background:var(--accent);color:#fff;width:24px;height:24px;border-radius:50%;text-align:center;line-height:24px;font-size:13px;font-weight:700;margin-right:8px;flex-shrink:0}@media(max-width:768px){.container{padding:24px 16px 48px}.hero h1{font-size:30px}.section-title{font-size:22px}.card-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body><button class="theme-toggle" onclick="toggleTheme()">🌓</button>
@@ -20,106 +20,315 @@ function toggleTheme(){var h=document.documentElement;var n=h.getAttribute('data
 </script>
 <div class="container">
 
-<div class="hero"><div class="badge">模块 5 / 10 ⭐ 核心差异化</div><h1>技能系统 (Skills)</h1><p class="subtitle">Hermes 最独特的能力——从经验中自我学习，越用越聪明。</p><p class="meta">预计阅读时间：20 分钟</p></div>
+<div class="hero">
+<div class="badge">模块 5 / 10 ⭐ 核心差异化</div><h1>技能系统 (Skills)</h1>
+<p class="subtitle">Hermes 最独特的能力——从经验中自动创建可复用技能，越用越聪明。兼容 agentskills.io 开放标准。</p>
+<p class="meta">预计阅读时间：25 分钟 · 前置：<a href="../04-tools/" style="color:var(--accent)">模块 4</a> · <span class="version-badge">v0.17.0</span></p>
+</div>
+
 <div class="toc"><h3>📑 本模块目录</h3><ol>
-<li><a href="#s1">Skill 是什么？</a></li><li><a href="#s2">SKILL.md 格式</a></li><li><a href="#s3">技能的生命周期</a></li><li><a href="#s4">Skill vs Project Context</a></li><li><a href="#s5">技能管理命令</a></li><li><a href="#s6">自学习闭环</a></li>
+<li><a href="#s1">Skill 是什么？为什么它是核心差异化</a></li>
+<li><a href="#s2">底层原理：Skill 的加载与执行</a></li>
+<li><a href="#s3">SKILL.md 完整格式规范</a></li>
+<li><a href="#s4">技能生命周期与 Curator 自动维护</a></li>
+<li><a href="#s5">agentskills.io 开放标准</a></li>
+<li><a href="#s6">实操：创建、安装、管理 Skill</a></li>
+<li><a href="#s7">Skill vs Project Context vs Memory</a></li>
+<li><a href="#s8">自学习闭环深度解析</a></li>
+<li><a href="#s9">常见疑问</a></li>
+<li><a href="#s10">本章复核验收清单</a></li>
 </ol></div>
 
-<section id="s1"><div class="section-title"><span class="num">1</span> Skill 是什么？</div>
-<p>Skill 是 Hermes 的<strong>可复用知识文档</strong>——Agent 完成一次复杂任务后，把过程中学到的流程、命令、注意事项保存为 Skill。下次遇到类似任务时自动加载，不用从头摸索。</p>
-<p>这是 Hermes 和所有其他 Agent 框架<strong>最本质的区别</strong>。Claude Code、Codex CLI 都不会从经验中学习——每次都是"第一次做"。Hermes 会<strong>积累经验</strong>。</p>
+<section id="s1"><div class="section-title"><span class="num">1</span> Skill 是什么？为什么它是核心差异化</div>
+
+<p>Skill（技能）是 Hermes Agent <strong>最核心的差异化能力</strong>——一套内置的<strong>自学习系统</strong>，让 Agent 从每次交互中积累经验，自动创建、迭代、复用可执行的知识文档。</p>
+
 <div class="card-grid">
-<div class="card"><h3>🧠 人类类比</h3><p>像一个新员工入职第一天 vs 工作一年后。Skill 就是 Agent 的<strong>工作笔记</strong>——踩过的坑、发现的捷径、验证过的流程，都记下来下次直接用。</p></div>
-<div class="card"><h3>📂 物理形态</h3><p>Skill 就是 <code>~/.hermes/skills/</code> 下的 <code>SKILL.md</code> 文件。YAML frontmatter + Markdown 正文。Agent 可以创建、修改、删除自己的 Skill。</p></div>
+<div class="card"><h3>🧠 人类类比</h3><p>像一个新员工入职第一天 vs 工作一年后。Skill 就是 Agent 的<strong>工作笔记</strong>——踩过的坑、发现的捷径、验证过的流程，都记下来下次直接用。<strong>这不是"记住偏好"，而是"记住怎么做"。</strong></p></div>
+<div class="card"><h3>⚡ 与竞品的本质区别</h3><p>Claude Code、Codex CLI、GitHub Copilot 都<strong>不会从经验中学习</strong>——每次都是"第一次做"。Hermes 是<strong>唯一</strong>内置完整学习闭环的 Agent 框架。</p></div>
 </div>
+
+<div class="callout tip"><strong>【v0.17 2026 更新】</strong>Hermes 现已兼容 <strong>agentskills.io</strong> 开放标准——在 Hermes 中创建的 Skill 可在其他兼容 Agent 中使用，反之亦然。Skill 生态正在形成跨框架的互操作网络。</div>
 </section>
 
 <hr>
-<section id="s2"><div class="section-title"><span class="num">2</span> SKILL.md 格式</div>
+
+<section id="s2"><div class="section-title"><span class="num">2</span> 底层原理：Skill 的加载与执行</div>
+
+<p>Skill 不是简单的"给 LLM 一段提示词"——它经过了<strong>三层处理链路</strong>，确保 Skill 不仅被读取，更被<strong>理解并执行</strong>。</p>
+
+<div class="mermaid-wrap"><div class="mermaid">
+flowchart TD
+    A["① Skill 文件 (.md)"] --> B["② 加载到 System Prompt<br/>Layer 5 · Active Skills"]
+    B --> C["③ LLM 解析触发条件<br/>匹配当前任务"]
+    C --> D{"触发？"}
+    D -->|"匹配"| E["④ LLM 按 Skill 指令<br/>调用工具执行"]
+    D -->|"不匹配"| F["⑤ Skill 保持待命<br/>不影响当前任务"]
+    E --> G["⑥ 执行成功后<br/>Curator 记录使用"]
+    G --> H["⑦ 高频 Skill 提升权重<br/>未来优先加载"]
+</div></div>
+
+<p><strong>关键机制：</strong></p>
+<ul style="padding-left:18px;color:var(--text2);">
+  <li><strong>注入位置：</strong>Skill 内容注入 System Prompt 的 <strong>Layer 5</strong>（在 Persona、Memory 之后，Project Context 之前），优先级高于项目级规则。</li>
+  <li><strong>触发方式：</strong>LLM 根据 Skill 的 <code>description</code> 和 <code>triggers</code> 字段自行判断是否适用——不需要用户手动指定。多个 Skill 同时加载时，LLM 会按相关性自行选用。</li>
+  <li><strong>加载时机：</strong>会话启动时通过 <code>--skills</code> flag 或 <code>/skill name</code> 斜杠命令加载。加载后<strong>会话内持续有效</strong>（受 Prompt Caching 保护），跨会话不自动延续。</li>
+  <li><strong>权重学习：</strong>Curator 追踪每个 Skill 的使用频率和成功率。高频 Skill 在 <code>/skill</code> 自动补全中排名更高，Agent 也倾向于优先匹配。</li>
+</ul>
+</section>
+
+<hr>
+
+<section id="s3"><div class="section-title"><span class="num">3</span> SKILL.md 完整格式规范</div>
+<div class="section-subtitle">每个 Skill 是一个 Markdown 文件，YAML frontmatter + Markdown 正文</div>
+
+<h3 class="sub-title">必填字段（YAML frontmatter）</h3>
 <div class="code-block">
 <span class="c4">---</span><br>
-<span class="c2">name:</span> my-skill<br>
-<span class="c2">description:</span> 这个 Skill 做什么、什么场景触发<br>
-<span class="c2">version:</span> 1.0.0<br>
-<span class="c4">---</span><br><br>
+<span class="c2">name:</span> my-skill &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 唯一标识，小写 + 连字符，≤64 字符</span><br>
+<span class="c2">description:</span> &gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 一句话描述 + 触发场景（LLM 用于判断是否匹配）</span><br>
+&nbsp;&nbsp;当用户需要 X 时使用此技能。触发词：Y, Z。<br>
+<span class="c2">version:</span> 1.0.0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 语义化版本</span><br>
+<span class="c4">---</span>
+</div>
+
+<h3 class="sub-title">可选字段</h3>
+<div class="code-block">
+<span class="c2">license:</span> MIT<br>
+<span class="c2">platforms:</span> [linux, macos, windows]<br>
+<span class="c2">triggers:</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 关键词触发列表（辅助 LLM 匹配）</span><br>
+&nbsp;&nbsp;<span class="c2">- deploy:</span> 部署/发布/上线/deploy<br>
+&nbsp;&nbsp;<span class="c2">- test:</span> 测试/test/验证<br>
+<span class="c2">metadata:</span><br>
+&nbsp;&nbsp;<span class="c2">author:</span> hermes-agent<br>
+&nbsp;&nbsp;<span class="c2">tags:</span> [devops, python]<br>
+&nbsp;&nbsp;<span class="c2">homepage:</span> https://example.com
+</div>
+
+<h3 class="sub-title">正文规范</h3>
+<div class="code-block">
 <span class="c1"># 技能标题</span><br><br>
 <span class="c1">## 何时使用</span><br>
-触发条件描述<br><br>
+明确的触发条件，用第二人称描述（Hermes: 当用户说 X 时…）<br><br>
 <span class="c1">## 工作流程</span><br>
-1. 第一步<br>
-2. 第二步<br><br>
-<span class="c1">## 常见问题</span><br>
-- 坑 1：描述 + 解决方案<br>
-- 坑 2：描述 + 解决方案
+1. 第一步：具体命令<br>2. 第二步：验证方式 &rarr; 验证：[怎么确认做对了]<br><br>
+<span class="c1">## 常见陷阱</span><br>
+- 坑 1：现象 + 根因 + 解决方案<br><br>
+<span class="c1">## 参考</span><br>
+相关 API 文档链接、配置文件路径
 </div>
-<div class="callout tip"><strong>💡 好的 Skill 特征：</strong>明确的触发条件、步骤编号、具体的命令示例、常见陷阱标注。越具体越好——"用这个命令"比"处理这个问题"有效 100 倍。</div>
+
+<div class="callout warn"><strong>⚠️ 格式陷阱：</strong>正文中不要用第一人称"我"——Skill 是指令文档，不是对话。始终用"Agent 应该…""当用户…时"。description 字段是 LLM 做匹配判断的唯一依据，必须写得<strong>具体</strong>——"部署 Python 项目到 Docker"比"部署相关"有效 100 倍。</div>
 </section>
 
 <hr>
-<section id="s3"><div class="section-title"><span class="num">3</span> 技能的生命周期</div>
+
+<section id="s4"><div class="section-title"><span class="num">4</span> 技能生命周期与 Curator 自动维护</div>
+
+<p>Skill 不是静态文档——它有一个<strong>完整的生命周期</strong>，由内置的 <strong>Curator（技能管家）</strong> 自动管理。</p>
+
 <div class="mermaid-wrap"><div class="mermaid">
 flowchart TD
-    A["Agent 完成复杂任务"] --> B["保存为 Skill<br/>hermes skills install"]
-    B --> C["Curator 后台维护<br/>追踪使用频率"]
-    C --> D{"活跃使用？"}
-    D -->|"是"| E["✅ 保持活跃"]
-    D -->|"否(30天)"| F["📦 标记为 stale"]
-    F --> G{"又过30天？"}
-    G -->|"是"| H["🗄️ 自动归档<br/>可恢复"]
-    G -->|"被再次使用"| E
+    A["📝 创建"] --> B["✅ 活跃<br/>Agent 高频使用"]
+    B --> C{"30 天未使用？"}
+    C -->|"否"| B
+    C -->|"是"| D["📦 Stale<br/>标记为'不活跃'"]
+    D --> E{"再过 30 天？"}
+    E -->|"被重新使用"| B
+    E -->|"仍未使用"| F["🗄️ 归档<br/>移到 archive/ 目录"]
+    F --> G{"手动恢复？"}
+    G -->|"是"| B
+    G -->|"否"| H["💤 保持归档<br/>（永不删除）"]
 </div></div>
-<p><strong>Curator</strong> 是 Hermes 内置的技能生命周期管理器。它自动追踪每个 Skill 的使用频率，闲置太久的标记为 stale，最终归档（不删除，可恢复）。</p>
+
+<h3 class="sub-title">Curator 核心行为</h3>
+<div class="card-grid">
+<div class="card"><h3>🔍 自动追踪</h3><p>每次 Skill 被加载时，Curator 记录到 <code>~/.hermes/skills/.usage.json</code>。追踪：使用次数、查看次数、修补次数、最后活动时间。</p></div>
+<div class="card"><h3>📌 Pin 保护</h3><p>重要的 Skill 可以用 <code>hermes curator pin &lt;name&gt;</code> 锁定——锁定的 Skill <strong>永不</strong>自动归档，也不受闲置清理影响。</p></div>
+<div class="card"><h3>🔄 自动备份</h3><p>Curator 每次运行前自动创建 <code>.tar.gz</code> 全量备份。即使误归档也能通过 <code>rollback</code> 恢复。</p></div>
+<div class="card"><h3>📊 仅管 Agent 创建的 Skill</h3><p>Curator 只处理 <code>created_by: "agent"</code> 的 Skill。Bundled 技能和 Hub 安装的技能不受影响。</p></div>
+</div>
+
+<h3 class="sub-title">Curator 配置</h3>
+<div class="code-block"><span class="c2">curator:</span><br>
+<span class="c2">  enabled:</span> true &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 是否启用</span><br>
+<span class="c2">  interval_hours:</span> 24 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 检查间隔</span><br>
+<span class="c2">  stale_after_days:</span> 30 &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 闲置多久标记 stale</span><br>
+<span class="c2">  archive_after_days:</span> 30 &nbsp;&nbsp;<span class="c1"># stale 后再多久归档</span><br>
+<span class="c2">  backup:</span><br>
+<span class="c2">    enabled:</span> true</div>
+</section>
+
+<hr>
+
+<section id="s5"><div class="section-title"><span class="num">5</span> agentskills.io 开放标准 <span class="version-badge">v0.17 新增</span></div>
+<div class="section-subtitle">Skill 不锁死在 Hermes——一次编写，跨框架复用</div>
+
+<p>【v0.17 2026 更新】Hermes 正式兼容 <a href="https://agentskills.io" style="color:var(--accent)">agentskills.io</a> 开放标准。这意味着：</p>
+
+<div class="card-grid">
+<div class="card"><h3>🔗 跨框架互操作</h3><p>在 Hermes 中创建的 Skill，导出的 <code>SKILL.md</code> 可直接在其他兼容 Agent 中使用（反之亦然）。Skill 不再被单一框架锁定。</p></div>
+<div class="card"><h3>📦 Skills Hub</h3><p>agentskills.io 是公共 Skill 注册中心。<code>hermes skills search</code> 和 <code>hermes skills install</code> 默认连到这个 Hub。</p></div>
+<div class="card"><h3>📐 格式标准化</h3><p>SKILL.md 的 YAML frontmatter 字段（name、description、triggers 等）遵循 agentskills.io 规范，保证跨平台一致性。</p></div>
+</div>
+
 <div class="code-block">
-hermes curator status &nbsp;<span class="c1"># 查看状态</span><br>
-hermes curator run &nbsp;&nbsp;&nbsp;<span class="c1"># 手动触发维护</span><br>
-hermes curator pin NAME &nbsp;<span class="c1"># 锁定重要 Skill（不吃自动清理）</span><br>
-hermes curator restore NAME <span class="c1"># 恢复已归档的 Skill</span>
+<span class="c1"># 搜索 Hub 上的 Skill</span><br>
+hermes skills search <span class="c3">"docker deployment"</span><br><br>
+<span class="c1"># 从 Hub 安装（通过 ID 或 URL）</span><br>
+hermes skills install <span class="c3">"docker-deploy"</span><br>
+hermes skills install <span class="c3">"https://agentskills.io/skills/docker-deploy/SKILL.md"</span><br><br>
+<span class="c1"># 从 GitHub repo 添加 Skill 源</span><br>
+hermes skills tap add <span class="c3">"my-org/hermes-skills"</span>
 </div>
 </section>
 
 <hr>
-<section id="s4"><div class="section-title"><span class="num">4</span> Skill vs Project Context</div>
+
+<section id="s6"><div class="section-title"><span class="num">6</span> 实操：创建、安装、管理 Skill</div>
+
+<h3 class="sub-title">场景：创建一个「Django 部署检查清单」Skill</h3>
+
+<div class="code-block">
+<span class="c4">---</span><br>
+<span class="c2">name:</span> django-deploy-checklist<br>
+<span class="c2">description:</span> 当用户要部署 Django 项目到生产环境时使用。<br>
+&nbsp;&nbsp;触发词：部署 Django / deploy Django / 上线 Django<br>
+<span class="c2">version:</span> 1.0.0<br>
+<span class="c2">triggers:</span><br>
+&nbsp;&nbsp;<span class="c2">- deploy:</span> 部署/deploy/上线/发布<br>
+&nbsp;&nbsp;<span class="c2">- django:</span> Django/django<br>
+<span class="c4">---</span><br><br>
+<span class="c1"># Django 部署检查清单</span><br><br>
+<span class="c1">## 何时使用</span><br>
+当用户提到部署 Django 项目时，按此清单逐项检查。<br><br>
+<span class="c1">## 检查步骤</span><br>
+1. <span class="c4">python manage.py check --deploy</span> &rarr; 验证：无 ERROR<br>
+2. <code>grep SECRET_KEY .env</code> &rarr; 验证：不为空<br>
+3. <code>grep DEBUG settings.py</code> &rarr; 验证：必须为 False<br>
+4. <code>python manage.py collectstatic --dry-run</code> &rarr; 验证：无报错<br>
+5. <code>python manage.py migrate --plan</code> &rarr; 验证：确认迁移列表<br><br>
+<span class="c1">## 常见陷阱</span><br>
+- <strong>忘记设置 ALLOWED_HOSTS</strong>：生产部署后 400 Bad Request。<br>
+&nbsp;&nbsp;解决：检查 <code>settings.py</code> 中 ALLOWED_HOSTS 包含生产域名。
+</div>
+
+<h3 class="sub-title">管理命令一览</h3>
+<div class="code-block">
+<span class="c1"># 会话内加载</span><br>
+/skill django-deploy-checklist &nbsp;&nbsp;<span class="c1"># 加载到当前会话</span><br>
+/reload-skills &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 重新扫描 skills/ 目录</span><br><br>
+<span class="c1"># 全局管理</span><br>
+hermes skills list &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 列出已安装</span><br>
+hermes skills search <span class="c3">"query"</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 搜索 Hub</span><br>
+hermes skills install <span class="c3">"id"</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 从 Hub 安装</span><br>
+hermes skills uninstall <span class="c3">N</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 卸载</span><br>
+hermes skills check &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 检查更新</span><br>
+hermes skills update &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 更新过期 Skill</span><br>
+hermes skills config &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 按平台启用/禁用</span><br>
+hermes skills browse &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 浏览所有可用 Skill</span><br><br>
+<span class="c1"># Curator</span><br>
+hermes curator status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 查看状态</span><br>
+hermes curator pin <span class="c3">"name"</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 锁定重要 Skill</span><br>
+hermes curator restore <span class="c3">"name"</span> &nbsp;<span class="c1"># 恢复已归档 Skill</span>
+</div>
+</section>
+
+<hr>
+
+<section id="s7"><div class="section-title"><span class="num">7</span> Skill vs Project Context vs Memory</div>
+<div class="section-subtitle">三个概念容易混淆——一张表彻底分清</div>
+
 <table class="compare-table">
-<thead><tr><th>维度</th><th>Skill</th><th>Project Context (.hermes.md)</th></tr></thead>
-<tr><td><strong>用途</strong></td><td>可复用的工作流程、领域知识</td><td>项目级约定、构建规则</td></tr>
-<tr><td><strong>加载时机</strong></td><td>手动 <code>/skill name</code> 或自动匹配</td><td>进入项目目录时自动加载</td></tr>
-<tr><td><strong>范围</strong></td><td>跨项目通用</td><td>当前项目独有</td></tr>
-<tr><td><strong>生命周期</strong></td><td>Curator 自动管理</td><td>手动编辑维护</td></tr>
-<tr><td><strong>典型内容</strong></td><td>"如何部署这个框架" "API 参考"</td><td>"用 pytest 测试" "不要用 print"</td></tr>
+<thead><tr><th>维度</th><th>Skill</th><th>Project Context</th><th>Memory</th></tr></thead>
+<tr><td><strong>粒度</strong></td><td>可复用的工作流程</td><td>项目级规则</td><td>事实片段</td></tr>
+<tr><td><strong>示例</strong></td><td>"Django 部署检查清单"</td><td>"用 pytest 测试"</td><td>"项目在 ~/code/myapp"</td></tr>
+<tr><td><strong>加载</strong></td><td>/skill 或自动匹配</td><td>进入项目目录自动</td><td>System Prompt Layer 3+4 自动注入</td></tr>
+<tr><td><strong>作用域</strong></td><td>跨项目</td><td>当前项目</td><td>跨会话、跨项目</td></tr>
+<tr><td><strong>生命周期</strong></td><td>Curator 自动管理</td><td>手动维护</td><td>字符预算自动清理</td></tr>
+<tr><td><strong>优先级</strong></td><td>Layer 5</td><td>Layer 6</td><td>Layer 3+4</td></tr>
 </table>
-<div class="callout think"><strong>🤔 什么时候用哪个？</strong>如果某个知识<strong>和项目无关、可能在其他地方复用</strong>，写成 Skill。如果是<strong>单个项目的特定要求</strong>，写到 .hermes.md。</div>
+
+<div class="callout think"><strong>🤔 快速判断：</strong>如果内容是<strong>"怎么做"</strong>（流程、步骤），写成 Skill。如果是<strong>"在这个项目里怎么做"</strong>（项目约定），写到 Project Context。如果是<strong>"是什么"</strong>（事实、路径），存为 Memory。</div>
 </section>
 
 <hr>
-<section id="s5"><div class="section-title"><span class="num">5</span> 技能管理命令</div>
-<div class="code-block">
-hermes skills list &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 列出已安装</span><br>
-hermes skills search QUERY &nbsp;<span class="c1"># 搜索 Hub</span><br>
-hermes skills install ID &nbsp;<span class="c1"># 从 Hub 安装（支持 URL）</span><br>
-hermes skills uninstall N &nbsp;<span class="c1"># 卸载</span><br>
-hermes skills check &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 检查更新</span><br>
-hermes skills update &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 更新过期 Skill</span><br>
-hermes skills config &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 按平台启用/禁用</span><br><br>
-<span class="c1"># 会话内操作</span><br>
-/skill name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 加载 Skill 到当前会话</span><br>
-/reload-skills &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1"># 重新扫描 skills/ 目录</span>
-</div>
-</section>
 
-<hr>
-<section id="s6"><div class="section-title"><span class="num">6</span> 自学习闭环</div>
+<section id="s8"><div class="section-title"><span class="num">8</span> 自学习闭环深度解析</div>
+<div class="section-subtitle">这是 Hermes 最独特的能力——Agent 从每次交互中自动成长</div>
+
 <div class="mermaid-wrap"><div class="mermaid">
 flowchart TD
-    A["👤 用户提出任务"] --> B["🤖 Agent 执行任务"]
+    A["👤 用户提出任务"] --> B["🤖 Agent 执行<br/>调用工具，多步推理"]
     B --> C{"任务成功？"}
-    C -->|"是"| D["💾 Agent 保存为 Skill"]
-    C -->|"否"| E["🔧 用户纠正"]
-    E --> F["📝 Agent 修补 Skill"]
-    D --> G["📚 Skill 库增长"]
-    F --> G
-    G --> H["🎯 下次类似任务<br/>自动加载对应 Skill"]
-    H --> B
+    C -->|"成功"| D["⚡ Agent 判断：<br/>是否值得保存为 Skill？"]
+    C -->|"失败"| E["🔧 用户纠正<br/>或 Agent 自我诊断"]
+    E --> F["📝 修补已有 Skill<br/>或创建纠错 Skill"]
+    F --> G["Skill 库更新"]
+    D -->|"值得"| H["💾 Agent 自动创建<br/>SKILL.md"]
+    D -->|"不值得"| I["跳过"]
+    H --> G
+    G --> J["🎯 下次类似任务<br/>自动匹配 + 加载"]
+    J --> K["📊 Curator 追踪效果<br/>好的提升权重<br/>差的标记待修补"]
+    K --> B
 </div></div>
-<p>这个闭环是 Hermes 的核心创新：<strong>用户不需要手动教 Agent——Agent 从每次交互中自动积累经验。</strong>用 Hermes 越久，它就越了解你的工作方式和偏好。</p>
-<div class="takeaway"><div class="label">📌 要点</div><ul><li>Skill 是 Hermes 的自学习机制——其他 Agent 没有</li><li>Curator 自动管理 Skill 生命周期，闲置的归档不删除</li><li>Skill 跨项目复用，Project Context 项目独有</li><li>每次成功完成任务后考虑保存为 Skill</li></ul></div>
+
+<h3 class="sub-title">自学习的关键触发条件</h3>
+<p>Agent 不随意创建 Skill——它只在以下情况才会触发：</p>
+<ol style="padding-left:24px;color:var(--text2);">
+  <li><strong>复杂度阈值：</strong>任务涉及 5+ 个 tool call 或跨越多个领域</li>
+  <li><strong>新颖性：</strong>现有 Skill 无法覆盖，Agent 需要从头摸索</li>
+  <li><strong>可复现性：</strong>任务流程明确、步骤可复现（不是一次性调研）</li>
+  <li><strong>用户确认：</strong>Agent 会问"是否保存为 Skill？"——需要用户同意才会创建</li>
+</ol>
+
+<div class="callout think"><strong>🧠 与 Memory 的协同：</strong>Skill 记住<strong>流程</strong>，Memory 记住<strong>上下文</strong>。例如：部署 Django 项目，Skill 记录"先跑 check --deploy"，Memory 记录"生产服务器 IP 是 xxx"。两者互补，缺一不可。</div>
 </section>
+
+<hr>
+
+<section id="s9"><div class="section-title"><span class="num">9</span> 常见疑问</div>
+
+<div class="faq-item"><div class="faq-q">Q: Skill 和 System Prompt 里的规则有什么区别？</div><div class="faq-a">System Prompt 规则是<strong>行为约束</strong>（"不要编造"），Skill 是<strong>操作流程</strong>（"部署时先做 X，再验证 Y"）。规则控制 Agent <em>怎么说话</em>，Skill 控制 Agent <em>怎么做</em>。</div></div>
+
+<div class="faq-item"><div class="faq-q">Q: Agent 会自动加载所有 Skill 吗？</div><div class="faq-a">不会。只有被 <code>/skill</code> 加载的 Skill 才进入当前会话。跨会话不自动延续——每次新会话需要重新加载。但 Curator 的权重机制会让 Agent 主动提醒你"之前有个 Skill 可能适合这个任务"。</div></div>
+
+<div class="faq-item"><div class="faq-q">Q: Skill 和 Custom Tool 什么时候用哪个？</div><div class="faq-a">如果有个<strong>外部 API</strong> 需要封装成固定调用——写 Custom Tool。如果有个<strong>多步骤流程</strong>需要用现有工具组合完成——写 Skill。Tool 提供<strong>新能力</strong>，Skill 编排<strong>现有能力</strong>。</div></div>
+
+<div class="faq-item"><div class="faq-q">Q: 怎么防止 Curator 删掉我的重要 Skill？</div><div class="faq-a">用 <code>hermes curator pin &lt;name&gt;</code> 锁定。锁定的 Skill <strong>永不自动归档</strong>。此外 Curator <strong>从不真正删除</strong>——最坏情况只是归档到 <code>archive/</code> 目录，随时可恢复。</div></div>
+
+<div class="faq-item"><div class="faq-q">Q: agentskills.io 上的 Skill 质量怎么保证？</div><div class="faq-a">agentskills.io 是开放注册中心，质量参差不齐。建议优先用 <code>hermes skills browse</code> 看下载量和评分，或从官方推荐列表中选择。所有安装的 Skill 都会经过 Hermes 的安全扫描。</div></div>
+</section>
+
+<hr>
+
+<section id="s10"><div class="section-title"><span class="num">✅</span> 本章复核验收清单</div>
+
+<div class="checklist">
+<div class="item"><input type="checkbox"><span>理解 Skill 是什么——它不是"提示词"，而是<strong>可执行的工作流程文档</strong></span></div>
+<div class="item"><input type="checkbox"><span>能说出 Skill 与 Claude Code / Codex CLI 的本质区别（自学习闭环）</span></div>
+<div class="item"><input type="checkbox"><span>理解 SKILL.md 的 YAML frontmatter 必填字段：name、description、version</span></div>
+<div class="item"><input type="checkbox"><span>掌握 Skill 生命周期：活跃 → stale → 归档 → 恢复</span></div>
+<div class="item"><input type="checkbox"><span>理解 Curator 的角色：自动追踪、Pin 保护、备份、仅管 Agent 创建的 Skill</span></div>
+<div class="item"><input type="checkbox"><span>知道 agentskills.io 是什么——跨框架 Skill 互操作标准</span></div>
+<div class="item"><input type="checkbox"><span>会创建自己的 Skill：写 SKILL.md → 放到 skills/ 目录 → /skill 加载</span></div>
+<div class="item"><input type="checkbox"><span>能用 <code>hermes skills search/install/uninstall/list</code> 管理 Skill</span></div>
+<div class="item"><input type="checkbox"><span>分清 Skill（怎么做）、Project Context（项目约定）、Memory（是什么）</span></div>
+<div class="item"><input type="checkbox"><span>知道如何用 <code>hermes curator pin</code> 锁定重要 Skill</span></div>
+</div>
+
+<div class="takeaway"><div class="label">📌 本章核心要点</div><ul>
+<li>Skill 是 Hermes <strong>最独特的差异化能力</strong>——唯一内置自学习闭环的 Agent 框架</li>
+<li>Curator 自动管理 Skill 生命周期：追踪 → 标记 stale → 归档（不删除）</li>
+<li>agentskills.io 让 Skill 跨框架复用</li>
+<li>Skill 记流程，Memory 记事实，Project Context 记项目约定</li>
+</ul></div>
+</section>
+
+<hr>
+<div class="page-nav">
+<a href="../04-tools/">← 模块 4：工具系统</a>
+<a href="../06-memory/">模块 6：记忆系统 (Memory) →</a>
+</div>
+
+</div></body></html>
